@@ -7,6 +7,13 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>MIT</Copyright>
+    <Version>1.0.1.1</Version>
+    <AssemblyVersion>1.0.1.1</AssemblyVersion>
+    <FileVersion>1.0.1.1</FileVersion>
+    <PackageId>Aptacode.CSharp.NetCore</PackageId>
+    <Authors>Aptacode.CSharp.NetCore</Authors>
+    <Company>Aptacode.CSharp.NetCore</Company>
+    <Product>Aptacode.CSharp.NetCore</Product>
   </PropertyGroup>
 
   <ItemGroup>

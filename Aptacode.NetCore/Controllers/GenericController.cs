@@ -1,13 +1,13 @@
-﻿using Aptacode.CSharp.Utilities.Persistence;
+﻿using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Aptacode.CSharp.Utilities.Persistence;
 using Aptacode.CSharp.Utilities.Persistence.Repository;
 using Aptacode.CSharp.Utilities.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Aptacode.NetCore
+namespace Aptacode.CSharp.NetCore.Controllers
 {
     public abstract class GenericController<TEntity> : ControllerBase where TEntity : IEntity
     {

@@ -1,17 +1,17 @@
-﻿using Aptacode.CSharp.Utilities.Persistence;
-using Aptacode.CSharp.Utilities.Persistence.Repository;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using Aptacode.CSharp.Utilities.Persistence;
+using Aptacode.CSharp.Utilities.Persistence.Repository;
 
-namespace Aptacode.NetCore.Persistence
+namespace Aptacode.CSharp.NetCore.Persistence
 {
-    public abstract class GenericEfRepository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
+    public class GenericEfRepository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
     {
         protected readonly DbSet<TEntity> DbSet;
 
-        protected GenericEfRepository(DbSet<TEntity> dbSet)
+        public GenericEfRepository(DbSet<TEntity> dbSet)
         {
             DbSet = dbSet;
         }
