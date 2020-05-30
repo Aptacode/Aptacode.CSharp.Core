@@ -5,6 +5,7 @@ using Aptacode.CSharp.Utilities.Persistence;
 using Aptacode.CSharp.Utilities.Persistence.Repository;
 using Aptacode.CSharp.Utilities.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace Aptacode.CSharp.NetCore.Controllers
@@ -36,7 +37,8 @@ namespace Aptacode.CSharp.NetCore.Controllers
         [HttpGet]
         public virtual async Task<IActionResult> ReadAll()
         {
-            return Ok(Repository.AsQueryable().Select(e => e.Id));
+            var queryable = await Repository.AsQueryable().ToListAsync().ConfigureAwait(false);
+            return Ok(queryable.Select(e => e.Id));
         }
 
         [HttpGet("{id}")]
