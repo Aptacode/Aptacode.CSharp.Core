@@ -43,23 +43,23 @@ namespace Aptacode.CSharp.NetCore.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<TEntity>> PostMessage(TEntity entity)
+        public async Task<ActionResult<TEntity>> Post(TEntity entity)
         {
             await Repository.Create(entity).ConfigureAwait(false);
             await UnitOfWork.Commit().ConfigureAwait(false);
 
-            return CreatedAtAction("GetMessage", new { id = entity.Id }, entity);
+            return CreatedAtAction("Get", new { id = entity.Id }, entity);
         }
 
         [HttpGet]
-        public virtual async Task<ActionResult<IEnumerable<TEntity>>> ReadAll()
+        public virtual async Task<ActionResult<IEnumerable<TEntity>>> Get()
         {
             var results = await Repository.AsQueryable().ToListAsync().ConfigureAwait(false);
             return Ok(results);
         }
 
         [HttpGet("{id}")]
-        public virtual async Task<ActionResult<TEntity>> Read(int id)
+        public virtual async Task<ActionResult<TEntity>> Get(int id)
         {
             var result = await Repository.Get(id).ConfigureAwait(false);
             if (result == null)
