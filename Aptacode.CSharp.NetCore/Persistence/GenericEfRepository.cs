@@ -9,12 +9,12 @@ namespace Aptacode.CSharp.NetCore.Persistence
 {
     public class GenericEfRepository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
     {
-        protected DbSet<TEntity> DbSet { get; }
-
         public GenericEfRepository(DbSet<TEntity> dbSet)
         {
             DbSet = dbSet;
         }
+
+        protected DbSet<TEntity> DbSet { get; }
 
         public virtual async Task<int> Create(TEntity entity)
         {

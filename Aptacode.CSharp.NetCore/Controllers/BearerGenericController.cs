@@ -14,20 +14,17 @@ namespace Aptacode.CSharp.NetCore.Controllers
     {
         protected BearerGenericController(IGenericUnitOfWork unitOfWork) : base(unitOfWork)
         {
-
         }
 
         public int GetUserId()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            if (Int32.TryParse(userId, out var result))
+            if (int.TryParse(userId, out var result))
             {
                 return result;
             }
-            else
-            {
-                throw new ArgumentException("Invalid user token");
-            }
+
+            throw new ArgumentException("Invalid user token");
         }
 
         public TUserRoles GetUserRole<TUserRoles>() where TUserRoles : struct, Enum

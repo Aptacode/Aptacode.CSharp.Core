@@ -20,12 +20,43 @@ namespace Aptacode.CSharp.NetCore.Controllers
             Repository = unitOfWork.Repository<TEntity>();
         }
 
+        protected virtual async Task<(bool, StatusCodeResult)> IsPutAuthorized(TEntity entity)
+        {
+            return (true, Ok());
+        }
+
+        protected virtual async Task<(bool, StatusCodeResult)> IsPostAuthorized(TEntity entity)
+        {
+            return (true, Ok());
+        }
+
+        protected virtual async Task<(bool, StatusCodeResult)> IsGetAuthorized()
+        {
+            return (true, Ok());
+        }
+
+        protected virtual async Task<(bool, StatusCodeResult)> IsGetAuthorized(int id)
+        {
+            return (true, Ok());
+        }
+
+        protected virtual async Task<(bool, StatusCodeResult)> IsDeleteAuthorized(TEntity entity)
+        {
+            return (true, Ok());
+        }
+
         [HttpPut("{id}")]
         public virtual async Task<IActionResult> Put(int id, TEntity entity)
         {
             if (id != entity.Id)
             {
                 return BadRequest();
+            }
+
+            var authorizedResult = await IsPutAuthorized(entity).ConfigureAwait(false);
+            if (!authorizedResult.Item1)
+            {
+                return authorizedResult.Item2;
             }
 
             await Repository.Update(entity).ConfigureAwait(false);
@@ -45,15 +76,27 @@ namespace Aptacode.CSharp.NetCore.Controllers
         [HttpPost]
         public async Task<ActionResult<TEntity>> Post(TEntity entity)
         {
+            var authorizedResult = await IsPostAuthorized(entity).ConfigureAwait(false);
+            if (!authorizedResult.Item1)
+            {
+                return authorizedResult.Item2;
+            }
+
             await Repository.Create(entity).ConfigureAwait(false);
             await UnitOfWork.Commit().ConfigureAwait(false);
 
-            return CreatedAtAction("Get", new { id = entity.Id }, entity);
+            return CreatedAtAction("Get", new {id = entity.Id}, entity);
         }
 
         [HttpGet]
         public virtual async Task<ActionResult<IEnumerable<TEntity>>> Get()
         {
+            var authorizedResult = await IsGetAuthorized().ConfigureAwait(false);
+            if (!authorizedResult.Item1)
+            {
+                return authorizedResult.Item2;
+            }
+
             var results = await Repository.AsQueryable().ToListAsync().ConfigureAwait(false);
             return Ok(results);
         }
@@ -61,6 +104,12 @@ namespace Aptacode.CSharp.NetCore.Controllers
         [HttpGet("{id}")]
         public virtual async Task<ActionResult<TEntity>> Get(int id)
         {
+            var authorizedResult = await IsGetAuthorized(id).ConfigureAwait(false);
+            if (!authorizedResult.Item1)
+            {
+                return authorizedResult.Item2;
+            }
+
             var result = await Repository.Get(id).ConfigureAwait(false);
             if (result == null)
             {
@@ -69,7 +118,7 @@ namespace Aptacode.CSharp.NetCore.Controllers
 
             return Ok(result);
         }
-        
+
         [HttpDelete("{id}")]
         public virtual async Task<IActionResult> Delete(int id)
         {
@@ -77,6 +126,12 @@ namespace Aptacode.CSharp.NetCore.Controllers
             if (entity == null)
             {
                 return NotFound();
+            }
+
+            var authorizedResult = await IsDeleteAuthorized(entity).ConfigureAwait(false);
+            if (!authorizedResult.Item1)
+            {
+                return authorizedResult.Item2;
             }
 
             await Repository.Delete(id).ConfigureAwait(false);
