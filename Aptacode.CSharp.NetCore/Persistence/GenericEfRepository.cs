@@ -9,7 +9,7 @@ namespace Aptacode.CSharp.NetCore.Persistence
 {
     public class GenericEfRepository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
     {
-        protected readonly DbSet<TEntity> DbSet;
+        protected DbSet<TEntity> DbSet { get; }
 
         public GenericEfRepository(DbSet<TEntity> dbSet)
         {
@@ -40,8 +40,10 @@ namespace Aptacode.CSharp.NetCore.Persistence
         public virtual async Task Delete(int id)
         {
             var entity = await Get(id).ConfigureAwait(false);
-            DbSet.Remove(entity);
-
+            if (entity != null)
+            {
+                DbSet.Remove(entity);
+            }
         }
 
         public IQueryable<TEntity> AsQueryable()
