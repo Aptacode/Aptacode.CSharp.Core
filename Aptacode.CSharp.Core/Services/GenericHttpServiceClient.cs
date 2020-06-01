@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Aptacode.CSharp.NetCore.Http;
+using Aptacode.CSharp.Core.Http;
 using Aptacode.CSharp.Utilities.Persistence;
 using Newtonsoft.Json;
 
-namespace Aptacode.CSharp.NetCore.Services
+namespace Aptacode.CSharp.Core.Services
 {
     public abstract class GenericHttpApiServiceClient<TEntity> : IGenericHttpService<TEntity> where TEntity : IEntity
     {
@@ -15,7 +15,8 @@ namespace Aptacode.CSharp.NetCore.Services
         protected readonly HttpRouteBuilder ApiRouteBuilder;
         protected IAccessTokenService AuthService;
 
-        protected GenericHttpApiServiceClient(IAccessTokenService authService, ServerAddress serverAddress, string apiRoute,
+        protected GenericHttpApiServiceClient(IAccessTokenService authService, ServerAddress serverAddress,
+            string apiRoute,
             string controllerRoute)
         {
             ApiRouteBuilder = new HttpRouteBuilder(serverAddress, apiRoute, controllerRoute);

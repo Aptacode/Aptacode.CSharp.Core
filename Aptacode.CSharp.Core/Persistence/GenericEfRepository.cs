@@ -5,7 +5,7 @@ using Aptacode.CSharp.Utilities.Persistence;
 using Aptacode.CSharp.Utilities.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aptacode.CSharp.NetCore.Persistence
+namespace Aptacode.CSharp.Core.Persistence
 {
     public class GenericEfRepository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
     {

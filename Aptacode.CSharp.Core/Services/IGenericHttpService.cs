@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Aptacode.CSharp.Utilities.Persistence;
 
-namespace Aptacode.CSharp.NetCore.Services
+namespace Aptacode.CSharp.Core.Services
 {
     public interface IGenericHttpService<TEntity> where TEntity : IEntity
     {

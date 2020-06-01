@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Aptacode.CSharp.NetCore.Services
+﻿namespace Aptacode.CSharp.Core.Http
 {
     public class ServerAddress
     {

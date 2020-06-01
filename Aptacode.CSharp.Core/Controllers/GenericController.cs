@@ -7,7 +7,7 @@ using Aptacode.CSharp.Utilities.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Aptacode.CSharp.NetCore.Controllers
+namespace Aptacode.CSharp.Core.Controllers
 {
     public abstract class GenericController<TEntity> : ControllerBase where TEntity : IEntity
     {

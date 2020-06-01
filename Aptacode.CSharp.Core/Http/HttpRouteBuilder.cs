@@ -1,17 +1,18 @@
-﻿using Aptacode.CSharp.NetCore.Services;
-
-namespace Aptacode.CSharp.NetCore.Http
+﻿namespace Aptacode.CSharp.Core.Http
 {
     public class HttpRouteBuilder
     {
-        private readonly string _apiBaseRoute;
         private const string RouteSeparator = "/";
+        private readonly string _apiBaseRoute;
 
         public HttpRouteBuilder(ServerAddress serverAddress, string apiBaseRoute, string controllerRoute)
         {
             _apiBaseRoute = $"{serverAddress}/{apiBaseRoute}/{controllerRoute}/";
         }
 
-        public string GetRoute(params string[] routeSegments) => $"{_apiBaseRoute}{string.Join(RouteSeparator, routeSegments)}";
+        public string GetRoute(params string[] routeSegments)
+        {
+            return $"{_apiBaseRoute}{string.Join(RouteSeparator, routeSegments)}";
+        }
     }
 }

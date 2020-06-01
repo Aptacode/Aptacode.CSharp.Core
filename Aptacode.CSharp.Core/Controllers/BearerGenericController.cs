@@ -6,7 +6,7 @@ using Aptacode.CSharp.Utilities.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aptacode.CSharp.NetCore.Controllers
+namespace Aptacode.CSharp.Core.Controllers
 {
     [ApiController]
     [Authorize(AuthenticationSchemes = "Bearer")]
@@ -16,7 +16,7 @@ namespace Aptacode.CSharp.NetCore.Controllers
         {
         }
 
-        public int GetUserId()
+        protected int GetUserId()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (int.TryParse(userId, out var result))
@@ -27,15 +27,15 @@ namespace Aptacode.CSharp.NetCore.Controllers
             throw new ArgumentException("Invalid user token");
         }
 
-        public TUserRoles GetUserRole<TUserRoles>() where TUserRoles : struct, Enum
+        protected string GetUserRole()
         {
             var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            if (Enum.TryParse<TUserRoles>(userRole, out var result))
+            if (string.IsNullOrEmpty(userRole))
             {
-                return result;
+                throw new ArgumentException("Invalid user token");
             }
 
-            throw new ArgumentException("Invalid user token");
+            return userRole;
         }
     }
 }
