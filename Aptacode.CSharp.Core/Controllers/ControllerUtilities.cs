@@ -17,7 +17,7 @@ namespace Aptacode.CSharp.Core.Controllers
             throw new ArgumentException("Invalid user token");
         }
 
-        public static string GetUserRole(ClaimsPrincipal user)
+        public static string GetRole(ClaimsPrincipal user)
         {
             var userRole = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
             if (string.IsNullOrEmpty(userRole))
