@@ -95,6 +95,7 @@ namespace Aptacode.CSharp.Core.Controllers
             }
 
             var results = await Repository.AsQueryable().ToListAsync().ConfigureAwait(false);
+
             return Ok(results);
         }
 
