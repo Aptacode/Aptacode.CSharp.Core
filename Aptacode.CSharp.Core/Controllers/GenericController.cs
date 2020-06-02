@@ -45,8 +45,7 @@ namespace Aptacode.CSharp.Core.Controllers
             return (true, Ok());
         }
 
-        [HttpPut("{id}")]
-        public virtual async Task<IActionResult> Put(int id, TEntity entity)
+        protected virtual async Task<IActionResult> Put(int id, TEntity entity)
         {
             if (id != entity.Id)
             {
@@ -73,8 +72,7 @@ namespace Aptacode.CSharp.Core.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<TEntity>> Post(TEntity entity)
+        protected async Task<ActionResult<TEntity>> Post(TEntity entity)
         {
             var authorizedResult = await IsPostAuthorized(entity).ConfigureAwait(false);
             if (!authorizedResult.Item1)
@@ -85,11 +83,10 @@ namespace Aptacode.CSharp.Core.Controllers
             await Repository.Create(entity).ConfigureAwait(false);
             await UnitOfWork.Commit().ConfigureAwait(false);
 
-            return CreatedAtAction("Get", new {id = entity.Id}, entity);
+            return CreatedAtAction("Get", new { id = entity.Id }, entity);
         }
 
-        [HttpGet]
-        public virtual async Task<ActionResult<IEnumerable<TEntity>>> Get()
+        protected virtual async Task<ActionResult<IEnumerable<TEntity>>> Get()
         {
             var authorizedResult = await IsGetAuthorized().ConfigureAwait(false);
             if (!authorizedResult.Item1)
@@ -101,8 +98,7 @@ namespace Aptacode.CSharp.Core.Controllers
             return Ok(results);
         }
 
-        [HttpGet("{id}")]
-        public virtual async Task<ActionResult<TEntity>> Get(int id)
+        protected virtual async Task<ActionResult<TEntity>> Get(int id)
         {
             var authorizedResult = await IsGetAuthorized(id).ConfigureAwait(false);
             if (!authorizedResult.Item1)
@@ -119,8 +115,7 @@ namespace Aptacode.CSharp.Core.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{id}")]
-        public virtual async Task<IActionResult> Delete(int id)
+        protected virtual async Task<IActionResult> Delete(int id)
         {
             var entity = await Repository.Get(id).ConfigureAwait(false);
             if (entity == null)

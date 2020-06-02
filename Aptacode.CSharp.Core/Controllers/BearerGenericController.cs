@@ -14,6 +14,7 @@ namespace Aptacode.CSharp.Core.Controllers
     {
         protected BearerGenericController(IGenericUnitOfWork unitOfWork) : base(unitOfWork)
         {
+
         }
 
         protected int GetUserId()
