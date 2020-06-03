@@ -83,7 +83,7 @@ namespace Aptacode.CSharp.Core.Controllers
             await Repository.Create(entity).ConfigureAwait(false);
             await UnitOfWork.Commit().ConfigureAwait(false);
 
-            return CreatedAtAction("Get", new { id = entity.Id }, entity);
+            return CreatedAtAction("Get", new {id = entity.Id}, entity);
         }
 
         protected virtual async Task<ActionResult<IEnumerable<TEntity>>> Get()

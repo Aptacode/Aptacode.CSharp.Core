@@ -6,24 +6,27 @@ using Aptacode.CSharp.Utilities.Persistence.UnitOfWork;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aptacode.CSharp.Core.Controllers
+namespace Aptacode.CSharp.Core.Controllers.AutoMapper
 {
-    public abstract class AutoMapperGenericController<TViewModel, TEntity> : AutoMapperGenericController<TViewModel, TViewModel, TEntity> where TEntity : IEntity
+    public abstract class
+        AutoMapperGenericController<TViewModel, TEntity> : AutoMapperGenericController<TViewModel, TViewModel, TEntity>
+        where TEntity : IEntity
     {
-        protected AutoMapperGenericController(IGenericUnitOfWork unitOfWork, Mapper mapper) : base(unitOfWork, mapper)
+        protected AutoMapperGenericController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
-
         }
     }
 
-    public abstract class AutoMapperGenericController<TPutViewModel, TGetViewModel, TEntity> : GenericController<TEntity> where TEntity : IEntity
+    public abstract class
+        AutoMapperGenericController<TPutViewModel, TGetViewModel, TEntity> : GenericController<TEntity>
+        where TEntity : IEntity
     {
-        private Mapper _mapper { get; }
-
-        protected AutoMapperGenericController(IGenericUnitOfWork unitOfWork, Mapper mapper) : base(unitOfWork)
+        protected AutoMapperGenericController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork)
         {
             _mapper = mapper;
         }
+
+        private IMapper _mapper { get; }
 
         protected virtual async Task<ActionResult<TGetViewModel>> Get(int id)
         {

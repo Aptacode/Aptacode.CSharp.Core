@@ -8,27 +8,35 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Aptacode.CSharp.Core.Controllers
 {
-    public abstract class ViewModelGenericController<TViewModel, TEntity> : ViewModelGenericController<TViewModel, TViewModel,TEntity>
+    public abstract class
+        ViewModelGenericController<TViewModel, TEntity> : ViewModelGenericController<TViewModel, TViewModel, TEntity>
         where TEntity : IEntity
     {
         protected ViewModelGenericController(IGenericUnitOfWork unitOfWork) : base(unitOfWork)
         {
-
         }
     }
 
-    public abstract class ViewModelGenericController<TPutViewModel, TGetViewModel, TEntity> : GenericController<TEntity> where TEntity : IEntity
+    public abstract class ViewModelGenericController<TPutViewModel, TGetViewModel, TEntity> : GenericController<TEntity>
+        where TEntity : IEntity
     {
         protected ViewModelGenericController(IGenericUnitOfWork unitOfWork) : base(unitOfWork)
         {
-
         }
 
         public abstract TGetViewModel ToViewModel(TEntity entity);
         public abstract TEntity FromViewModel(TPutViewModel entity);
 
-        protected virtual async Task<IActionResult> Put(int id, TPutViewModel entity) => await base.Put(id, FromViewModel(entity)).ConfigureAwait(false);
-        protected async Task<ActionResult<TEntity>> Post(TPutViewModel entity) => await base.Post(FromViewModel(entity)).ConfigureAwait(false);
+        protected virtual async Task<IActionResult> Put(int id, TPutViewModel entity)
+        {
+            return await base.Put(id, FromViewModel(entity)).ConfigureAwait(false);
+        }
+
+        protected async Task<ActionResult<TEntity>> Post(TPutViewModel entity)
+        {
+            return await base.Post(FromViewModel(entity)).ConfigureAwait(false);
+        }
+
         protected virtual async Task<ActionResult<IEnumerable<TGetViewModel>>> Get()
         {
             var authorizedResult = await IsGetAuthorized().ConfigureAwait(false);
@@ -38,9 +46,10 @@ namespace Aptacode.CSharp.Core.Controllers
             }
 
             var results = await Repository.AsQueryable().ToListAsync().ConfigureAwait(false);
-            
+
             return Ok(results.Select(ToViewModel));
         }
+
         protected virtual async Task<ActionResult<TGetViewModel>> Get(int id)
         {
             var authorizedResult = await IsGetAuthorized(id).ConfigureAwait(false);

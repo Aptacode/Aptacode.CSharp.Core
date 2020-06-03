@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aptacode.CSharp.Utilities.Persistence;
 
 namespace Aptacode.CSharp.Core.Services
 {
-    public interface IGenericHttpService<TEntity> where TEntity : IEntity
+    public interface IGenericHttpService<TGetViewModel, TPutViewModel>
     {
-        Task<IEnumerable<TEntity>> Get();
-        Task<IEnumerable<TEntity>> Get(int id);
-        Task<TEntity> Push(TEntity entity);
-        Task Put(TEntity entity);
+        Task<IEnumerable<TGetViewModel>> Get();
+        Task<TGetViewModel> Get(int id);
+        Task<TPutViewModel> Push(int id, TPutViewModel entity);
+        Task Put(TPutViewModel entity);
         Task Delete(int id);
     }
 }
