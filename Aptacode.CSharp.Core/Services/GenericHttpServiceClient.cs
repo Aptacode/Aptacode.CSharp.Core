@@ -67,7 +67,7 @@ namespace Aptacode.CSharp.Core.Services
             await HttpClient.SendAsync(req);
         }
 
-        protected HttpRequestMessage GetRequestTemplate(HttpMethod method, string endpoint)
+        public HttpRequestMessage GetRequestTemplate(HttpMethod method, string endpoint)
         {
             var accessToken = AuthService.GetAccessToken();
             if (accessToken == null)
