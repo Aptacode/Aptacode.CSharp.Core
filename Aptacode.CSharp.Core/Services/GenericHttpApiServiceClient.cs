@@ -29,7 +29,7 @@ namespace Aptacode.CSharp.Core.Services
             var body = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<IEnumerable<TViewModel>>(body);
         }
-
+        
         protected async Task<TViewModel> Get<TViewModel>(params string[] routeSegments)
         {
             var response = await HttpClient.SendAsync(GetRequestTemplate(HttpMethod.Get, ApiRouteBuilder.GetRoute(routeSegments)));
