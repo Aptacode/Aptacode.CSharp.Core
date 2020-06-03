@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aptacode.CSharp.Core.Controllers.AutoMapper
 {
-
-    public class GenericRestController<TGetViewModel, TPutViewModel, TEntity> : AutoMapperGenericController where TEntity : IEntity
+    public class GenericRestController<TGetViewModel, TPutViewModel, TEntity> : AutoMapperGenericController
+        where TEntity : IEntity
     {
         public GenericRestController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
@@ -17,13 +17,13 @@ namespace Aptacode.CSharp.Core.Controllers.AutoMapper
         #region HttpMethods
 
         [HttpPost("{id}")]
-        public async Task<ActionResult<TGetViewModel>> Post(int id, [FromBody]TPutViewModel entity)
+        public async Task<ActionResult<TGetViewModel>> Post(int id, [FromBody] TPutViewModel entity)
         {
             return await base.Post<TGetViewModel, TPutViewModel, TEntity>(id, entity).ConfigureAwait(false);
         }
 
         [HttpPut]
-        public async Task<ActionResult<TGetViewModel>> Put([FromBody]TPutViewModel entity)
+        public async Task<ActionResult<TGetViewModel>> Put([FromBody] TPutViewModel entity)
         {
             return await base.Put<TGetViewModel, TPutViewModel, TEntity>(entity).ConfigureAwait(false);
         }

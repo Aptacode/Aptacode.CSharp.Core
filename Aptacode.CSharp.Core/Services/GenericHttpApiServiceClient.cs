@@ -23,23 +23,26 @@ namespace Aptacode.CSharp.Core.Services
 
         protected async Task<IEnumerable<TViewModel>> GetAll<TViewModel>(params string[] routeSegments)
         {
-            var response = await HttpClient.SendAsync(GetRequestTemplate(HttpMethod.Get, ApiRouteBuilder.GetRoute(routeSegments)));
+            var response =
+                await HttpClient.SendAsync(GetRequestTemplate(HttpMethod.Get, ApiRouteBuilder.GetRoute(routeSegments)));
             if (!response.IsSuccessStatusCode) return null;
 
             var body = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<IEnumerable<TViewModel>>(body);
         }
-        
+
         protected async Task<TViewModel> Get<TViewModel>(params string[] routeSegments)
         {
-            var response = await HttpClient.SendAsync(GetRequestTemplate(HttpMethod.Get, ApiRouteBuilder.GetRoute(routeSegments)));
+            var response =
+                await HttpClient.SendAsync(GetRequestTemplate(HttpMethod.Get, ApiRouteBuilder.GetRoute(routeSegments)));
 
             if (!response.IsSuccessStatusCode) return default;
             var body = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<TViewModel>(body);
         }
 
-        protected async Task<TGetViewModel> Put<TGetViewModel, TPutViewModel>(TPutViewModel entity, params string[] routeSegments)
+        protected async Task<TGetViewModel> Put<TGetViewModel, TPutViewModel>(TPutViewModel entity,
+            params string[] routeSegments)
         {
             var req = GetRequestTemplate(HttpMethod.Put, ApiRouteBuilder.GetRoute(routeSegments));
             req.Content = new StringContent(JsonConvert.SerializeObject(entity));
@@ -48,10 +51,10 @@ namespace Aptacode.CSharp.Core.Services
 
             var body = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<TGetViewModel>(body);
-
         }
 
-        protected async Task<TGetViewModel> Post<TGetViewModel, TPutViewModel>(TPutViewModel entity, params string[] routeSegments)
+        protected async Task<TGetViewModel> Post<TGetViewModel, TPutViewModel>(TPutViewModel entity,
+            params string[] routeSegments)
         {
             var req = GetRequestTemplate(HttpMethod.Put, ApiRouteBuilder.GetRoute(routeSegments));
             req.Content = new StringContent(JsonConvert.SerializeObject(entity));

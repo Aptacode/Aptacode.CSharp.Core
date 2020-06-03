@@ -39,7 +39,9 @@ namespace Aptacode.CSharp.Core.Controllers.AutoMapper
             return response.Result;
         }
 
-        protected virtual async Task<ActionResult<IEnumerable<TViewModel>>> Get<TViewModel, TEntity>(Expression<Func<TEntity, bool>> queryExpression, Func<Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
+        protected virtual async Task<ActionResult<IEnumerable<TViewModel>>> Get<TViewModel, TEntity>(
+            Expression<Func<TEntity, bool>> queryExpression, Func<Task<(bool, StatusCodeResult)>> validator = null)
+            where TEntity : IEntity
         {
             var response = await base.Get(queryExpression, validator).ConfigureAwait(false);
 
