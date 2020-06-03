@@ -16,26 +16,31 @@ namespace Aptacode.CSharp.Core.Controllers.AutoMapper
 
         #region HttpMethods
 
+        [HttpPost("{id}")]
         public async Task<ActionResult<TGetViewModel>> Post(int id, [FromBody]TPutViewModel entity)
         {
             return await base.Post<TGetViewModel, TPutViewModel, TEntity>(id, entity).ConfigureAwait(false);
         }
 
+        [HttpPut]
         public async Task<ActionResult<TGetViewModel>> Put([FromBody]TPutViewModel entity)
         {
             return await base.Put<TGetViewModel, TPutViewModel, TEntity>(entity).ConfigureAwait(false);
         }
 
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<TGetViewModel>>> Get()
         {
             return await base.Get<TGetViewModel, TEntity>().ConfigureAwait(false);
         }
 
+        [HttpGet("{id}")]
         public async Task<ActionResult<TGetViewModel>> Get(int id)
         {
             return await base.Get<TGetViewModel, TEntity>(id).ConfigureAwait(false);
         }
 
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             return await base.Delete<TEntity>(id).ConfigureAwait(false);
