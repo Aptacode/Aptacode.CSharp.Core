@@ -93,7 +93,7 @@ namespace Aptacode.CSharp.Core.Controllers
             return Ok(result);
         }
 
-        protected virtual async Task<ActionResult<IEnumerable<TEntity>>> Delete<TEntity>(int id,
+        protected virtual async Task<IActionResult> Delete<TEntity>(int id,
             Func<int, Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
         {
             if (validator != null)
@@ -103,6 +103,7 @@ namespace Aptacode.CSharp.Core.Controllers
             }
 
             await UnitOfWork.Repository<TEntity>().Delete(id).ConfigureAwait(false);
+
             try
             {
                 await UnitOfWork.Commit().ConfigureAwait(false);
