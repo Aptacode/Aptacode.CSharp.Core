@@ -18,57 +18,65 @@ namespace Aptacode.CSharp.Core.Controllers.AutoMapper
     }
 
     public abstract class
-        AutoMapperGenericController<TPutViewModel, TGetViewModel, TEntity> : GenericController<TEntity>
+        AutoMapperGenericController<TGetViewModel, TPutViewModel, TEntity> : GenericController<TEntity>
         where TEntity : IEntity
     {
+        protected IMapper Mapper { get; }
+
         protected AutoMapperGenericController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork)
         {
-            _mapper = mapper;
+            Mapper = mapper;
         }
 
-        private IMapper _mapper { get; }
 
-        protected virtual async Task<ActionResult<TGetViewModel>> Get(int id)
+        protected new virtual async Task<ActionResult<TGetViewModel>> Get(int id)
         {
-            var result = await base.Get(id).ConfigureAwait(false);
+            var response = await base.Get(id).ConfigureAwait(false);
 
-            if (result.Value != null)
+            if (response.Value != null)
             {
-                return Ok(_mapper.Map<TGetViewModel>(result.Value));
+                return Ok(Mapper.Map<TGetViewModel>(response.Value));
             }
 
-            return result.Result;
+            return response.Result;
         }
 
-        protected virtual async Task<ActionResult<IEnumerable<TGetViewModel>>> Get()
+        protected new virtual async Task<ActionResult<IEnumerable<TGetViewModel>>> Get()
         {
-            var result = await base.Get().ConfigureAwait(false);
+            var response = await base.Get().ConfigureAwait(false);
 
-            if (result.Value != null)
+            if (response.Value != null)
             {
-                return Ok(result.Value.Select(r => _mapper.Map<TGetViewModel>(r)));
+                return Ok(response.Value.Select(r => Mapper.Map<TGetViewModel>(r)));
             }
 
-            return result.Result;
+            return response.Result;
         }
 
-        protected virtual async Task<IActionResult> Put(int id, TPutViewModel viewModel)
+        protected virtual async Task<ActionResult<TGetViewModel>> Put(int id, TPutViewModel viewModel)
         {
-            var entity = _mapper.Map<TEntity>(viewModel);
-            return await base.Put(id, entity).ConfigureAwait(false);
+            var entity = Mapper.Map<TEntity>(viewModel);
+            var response = await base.Put(id, entity).ConfigureAwait(false);
+
+            if (response.Value != null)
+            {
+                return Ok(Mapper.Map<TGetViewModel>(response.Value));
+            }
+
+            return response.Result;
         }
 
         protected virtual async Task<ActionResult<TGetViewModel>> Post(TPutViewModel viewModel)
         {
-            var entity = _mapper.Map<TEntity>(viewModel);
+            var entity = Mapper.Map<TEntity>(viewModel);
 
-            var result = await base.Post(entity).ConfigureAwait(false);
-            if (result.Value != null)
+            var response = await base.Post(entity).ConfigureAwait(false);
+            if (response.Value != null)
             {
-                return Ok(_mapper.Map<TGetViewModel>(result.Value));
+                return Ok(Mapper.Map<TGetViewModel>(response.Value));
             }
 
-            return result.Result;
+            return response.Result;
         }
     }
 }

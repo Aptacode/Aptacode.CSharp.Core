@@ -45,7 +45,7 @@ namespace Aptacode.CSharp.Core.Controllers
             return (true, Ok());
         }
 
-        protected virtual async Task<IActionResult> Put(int id, TEntity entity)
+        protected virtual async Task<ActionResult<TEntity>> Put(int id, TEntity entity)
         {
             if (id != entity.Id)
             {
@@ -69,7 +69,7 @@ namespace Aptacode.CSharp.Core.Controllers
                 return NotFound();
             }
 
-            return NoContent();
+            return Ok(entity);
         }
 
         protected async Task<ActionResult<TEntity>> Post(TEntity entity)
@@ -83,7 +83,7 @@ namespace Aptacode.CSharp.Core.Controllers
             await Repository.Create(entity).ConfigureAwait(false);
             await UnitOfWork.Commit().ConfigureAwait(false);
 
-            return CreatedAtAction("Get", new {id = entity.Id}, entity);
+            return Ok(entity);
         }
 
         protected virtual async Task<ActionResult<IEnumerable<TEntity>>> Get()

@@ -17,7 +17,7 @@ namespace Aptacode.CSharp.Core.Controllers
         }
     }
 
-    public abstract class ViewModelGenericController<TPutViewModel, TGetViewModel, TEntity> : GenericController<TEntity>
+    public abstract class ViewModelGenericController<TGetViewModel, TPutViewModel, TEntity> : GenericController<TEntity>
         where TEntity : IEntity
     {
         protected ViewModelGenericController(IGenericUnitOfWork unitOfWork) : base(unitOfWork)
@@ -27,44 +27,54 @@ namespace Aptacode.CSharp.Core.Controllers
         public abstract TGetViewModel ToViewModel(TEntity entity);
         public abstract TEntity FromViewModel(TPutViewModel entity);
 
-        protected virtual async Task<IActionResult> Put(int id, TPutViewModel entity)
+        protected virtual async Task<ActionResult<TGetViewModel>> Put(int id, TPutViewModel entity)
         {
-            return await base.Put(id, FromViewModel(entity)).ConfigureAwait(false);
-        }
+            var result = await base.Put(id, FromViewModel(entity)).ConfigureAwait(false);
 
-        protected async Task<ActionResult<TEntity>> Post(TPutViewModel entity)
-        {
-            return await base.Post(FromViewModel(entity)).ConfigureAwait(false);
-        }
-
-        protected virtual async Task<ActionResult<IEnumerable<TGetViewModel>>> Get()
-        {
-            var authorizedResult = await IsGetAuthorized().ConfigureAwait(false);
-            if (!authorizedResult.Item1)
+            if (result.Value != null)
             {
-                return authorizedResult.Item2;
+                return Ok(ToViewModel(result.Value));
             }
 
-            var results = await Repository.AsQueryable().ToListAsync().ConfigureAwait(false);
-
-            return Ok(results.Select(ToViewModel));
+            return result.Result;
         }
 
-        protected virtual async Task<ActionResult<TGetViewModel>> Get(int id)
+        protected virtual async Task<ActionResult<TGetViewModel>> Post(TPutViewModel entity)
         {
-            var authorizedResult = await IsGetAuthorized(id).ConfigureAwait(false);
-            if (!authorizedResult.Item1)
+            var result = await base.Post( FromViewModel(entity)).ConfigureAwait(false);
+
+            if (result.Value != null)
             {
-                return authorizedResult.Item2;
+                return Ok(ToViewModel(result.Value));
             }
 
-            var result = await Repository.Get(id).ConfigureAwait(false);
-            if (result == null)
-            {
-                return NotFound();
-            }
+            return result.Result;
+        }
 
-            return Ok(ToViewModel(result));
+        protected new virtual async Task<ActionResult<IEnumerable<TGetViewModel>>> Get()
+        {
+            var response = await base.Get().ConfigureAwait(false);
+            if (response.Value != null)
+            {
+                return Ok(response.Value.Select(ToViewModel));
+            }
+            else
+            {
+                return response.Result;
+            }
+        }
+
+        protected new virtual async Task<ActionResult<TGetViewModel>> Get(int id)
+        {
+            var response = await base.Get(id).ConfigureAwait(false);
+            if (response.Value != null)
+            {
+                return Ok(ToViewModel(response.Value));
+            }
+            else
+            {
+                return response.Result;
+            }
         }
     }
 }
