@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Aptacode.CSharp.Utilities.Persistence;
@@ -8,18 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aptacode.CSharp.Core.Controllers.AutoMapper
 {
-    public abstract class
-        AutoMapperGenericController<TViewModel, TEntity> : AutoMapperGenericController<TViewModel, TViewModel, TEntity>
-        where TEntity : IEntity
-    {
-        protected AutoMapperGenericController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
-        {
-        }
-    }
-
-    public abstract class
-        AutoMapperGenericController<TGetViewModel, TPutViewModel, TEntity> : GenericController<TEntity>
-        where TEntity : IEntity
+    public abstract class AutoMapperGenericController : GenericController
     {
         protected AutoMapperGenericController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork)
         {
@@ -28,40 +18,45 @@ namespace Aptacode.CSharp.Core.Controllers.AutoMapper
 
         protected IMapper Mapper { get; }
 
-
-        protected new virtual async Task<ActionResult<TGetViewModel>> Get(int id)
+        protected virtual async Task<ActionResult<TViewModel>> Get<TViewModel, TEntity>(int id,
+            Func<int, Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
         {
-            var response = await base.Get(id).ConfigureAwait(false);
+            var response = await base.Get<TEntity>(id, validator).ConfigureAwait(false);
+
+            if (response.Value != null) return Ok(Mapper.Map<TViewModel>(response.Value));
+
+            return response.Result;
+        }
+
+        protected virtual async Task<ActionResult<IEnumerable<TViewModel>>> Get<TViewModel, TEntity>(
+            Func<Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
+        {
+            var response = await base.Get<TEntity>(validator).ConfigureAwait(false);
+
+            if (response.Value != null) return Ok(response.Value.Select(r => Mapper.Map<TViewModel>(r)));
+
+            return response.Result;
+        }
+
+        protected virtual async Task<ActionResult<TGetViewModel>> Post<TGetViewModel, TPostViewModel, TEntity>(int id,
+            TPostViewModel viewModel, Func<TEntity, Task<(bool, StatusCodeResult)>> validator = null)
+            where TEntity : IEntity
+        {
+            var entity = Mapper.Map<TEntity>(viewModel);
+            var response = await base.Post(id, entity, validator).ConfigureAwait(false);
 
             if (response.Value != null) return Ok(Mapper.Map<TGetViewModel>(response.Value));
 
             return response.Result;
         }
 
-        protected new virtual async Task<ActionResult<IEnumerable<TGetViewModel>>> Get()
-        {
-            var response = await base.Get().ConfigureAwait(false);
-
-            if (response.Value != null) return Ok(response.Value.Select(r => Mapper.Map<TGetViewModel>(r)));
-
-            return response.Result;
-        }
-
-        protected virtual async Task<ActionResult<TGetViewModel>> Put(int id, TPutViewModel viewModel)
-        {
-            var entity = Mapper.Map<TEntity>(viewModel);
-            var response = await base.Put(id, entity).ConfigureAwait(false);
-
-            if (response.Value != null) return Ok(Mapper.Map<TGetViewModel>(response.Value));
-
-            return response.Result;
-        }
-
-        protected virtual async Task<ActionResult<TGetViewModel>> Post(TPutViewModel viewModel)
+        protected virtual async Task<ActionResult<TGetViewModel>> Put<TGetViewModel, TPostViewModel, TEntity>(
+            TPostViewModel viewModel, Func<TEntity, Task<(bool, StatusCodeResult)>> validator = null)
+            where TEntity : IEntity
         {
             var entity = Mapper.Map<TEntity>(viewModel);
 
-            var response = await base.Post(entity).ConfigureAwait(false);
+            var response = await base.Put(entity, validator).ConfigureAwait(false);
             if (response.Value != null) return Ok(Mapper.Map<TGetViewModel>(response.Value));
 
             return response.Result;
