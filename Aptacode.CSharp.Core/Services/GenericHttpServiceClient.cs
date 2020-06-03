@@ -55,7 +55,7 @@ namespace Aptacode.CSharp.Core.Services
 
         }
 
-        protected async Task<TGetViewModel> Put<TGetViewModel, TPutViewModel>(int id, TPutViewModel entity, params string[] routeSegments)
+        protected async Task<TGetViewModel> Post<TGetViewModel, TPutViewModel>(int id, TPutViewModel entity, params string[] routeSegments)
         {
             var route = new List<string>(routeSegments) { id.ToString() };
 
