@@ -15,15 +15,13 @@ namespace Aptacode.CSharp.Core.Services
         protected readonly HttpRouteBuilder ApiRouteBuilder;
         protected IAccessTokenService AuthService;
 
-        protected GenericHttpApiServiceClient(IAccessTokenService authService, ServerAddress serverAddress,
-            string apiRoute,
-            string controllerRoute)
+        protected GenericHttpApiServiceClient(IAccessTokenService authService, ServerAddress serverAddress)
         {
-            ApiRouteBuilder = new HttpRouteBuilder(serverAddress, apiRoute, controllerRoute);
+            ApiRouteBuilder = new HttpRouteBuilder(serverAddress);
             AuthService = authService;
         }
 
-        protected async Task<IEnumerable<TViewModel>> Get<TViewModel>(params string[] routeSegments)
+        protected async Task<IEnumerable<TViewModel>> GetAll<TViewModel>(params string[] routeSegments)
         {
             var response = await HttpClient.SendAsync(GetRequestTemplate(HttpMethod.Get, ApiRouteBuilder.GetRoute(routeSegments)));
             if (!response.IsSuccessStatusCode) return null;
@@ -32,11 +30,9 @@ namespace Aptacode.CSharp.Core.Services
             return JsonConvert.DeserializeObject<IEnumerable<TViewModel>>(body);
         }
 
-        protected async Task<TViewModel> Get<TViewModel>(int id, params string[] routeSegments)
+        protected async Task<TViewModel> Get<TViewModel>(params string[] routeSegments)
         {
-            var route = new List<string>(routeSegments){ id.ToString() };
-
-            var response = await HttpClient.SendAsync(GetRequestTemplate(HttpMethod.Get, ApiRouteBuilder.GetRoute(route.ToArray())));
+            var response = await HttpClient.SendAsync(GetRequestTemplate(HttpMethod.Get, ApiRouteBuilder.GetRoute(routeSegments)));
 
             if (!response.IsSuccessStatusCode) return default;
             var body = await response.Content.ReadAsStringAsync();
@@ -55,11 +51,9 @@ namespace Aptacode.CSharp.Core.Services
 
         }
 
-        protected async Task<TGetViewModel> Post<TGetViewModel, TPutViewModel>(int id, TPutViewModel entity, params string[] routeSegments)
+        protected async Task<TGetViewModel> Post<TGetViewModel, TPutViewModel>(TPutViewModel entity, params string[] routeSegments)
         {
-            var route = new List<string>(routeSegments) { id.ToString() };
-
-            var req = GetRequestTemplate(HttpMethod.Put, ApiRouteBuilder.GetRoute(route.ToArray()));
+            var req = GetRequestTemplate(HttpMethod.Put, ApiRouteBuilder.GetRoute(routeSegments));
             req.Content = new StringContent(JsonConvert.SerializeObject(entity));
             var response = await HttpClient.SendAsync(req);
             if (!response.IsSuccessStatusCode) return default;
@@ -68,11 +62,9 @@ namespace Aptacode.CSharp.Core.Services
             return JsonConvert.DeserializeObject<TGetViewModel>(body);
         }
 
-        protected async Task<bool> Delete(int id, params string[] routeSegments)
+        protected async Task<bool> Delete(params string[] routeSegments)
         {
-            var route = new List<string>(routeSegments) { id.ToString() };
-
-            var req = GetRequestTemplate(HttpMethod.Delete, ApiRouteBuilder.GetRoute(route.ToArray()));
+            var req = GetRequestTemplate(HttpMethod.Delete, ApiRouteBuilder.GetRoute(routeSegments));
             var response = await HttpClient.SendAsync(req);
             return response.IsSuccessStatusCode;
         }

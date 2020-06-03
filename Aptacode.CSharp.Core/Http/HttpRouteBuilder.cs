@@ -5,9 +5,9 @@
         private const string RouteSeparator = "/";
         private readonly string _apiBaseRoute;
 
-        public HttpRouteBuilder(ServerAddress serverAddress, string apiBaseRoute, string controllerRoute)
+        public HttpRouteBuilder(ServerAddress serverAddress, params string[] baseRouteSegments)
         {
-            _apiBaseRoute = $"{serverAddress}/{apiBaseRoute}/{controllerRoute}/";
+            _apiBaseRoute = $"{serverAddress}{string.Join(RouteSeparator, baseRouteSegments)}";
         }
 
         public string GetRoute(params string[] routeSegments)
