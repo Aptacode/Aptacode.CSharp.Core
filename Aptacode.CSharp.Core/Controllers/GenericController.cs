@@ -47,16 +47,10 @@ namespace Aptacode.CSharp.Core.Controllers
 
         protected virtual async Task<ActionResult<TEntity>> Put(int id, TEntity entity)
         {
-            if (id != entity.Id)
-            {
-                return BadRequest();
-            }
+            if (id != entity.Id) return BadRequest();
 
             var authorizedResult = await IsPutAuthorized(entity).ConfigureAwait(false);
-            if (!authorizedResult.Item1)
-            {
-                return authorizedResult.Item2;
-            }
+            if (!authorizedResult.Item1) return authorizedResult.Item2;
 
             await Repository.Update(entity).ConfigureAwait(false);
 
@@ -75,10 +69,7 @@ namespace Aptacode.CSharp.Core.Controllers
         protected async Task<ActionResult<TEntity>> Post(TEntity entity)
         {
             var authorizedResult = await IsPostAuthorized(entity).ConfigureAwait(false);
-            if (!authorizedResult.Item1)
-            {
-                return authorizedResult.Item2;
-            }
+            if (!authorizedResult.Item1) return authorizedResult.Item2;
 
             await Repository.Create(entity).ConfigureAwait(false);
             await UnitOfWork.Commit().ConfigureAwait(false);
@@ -89,10 +80,7 @@ namespace Aptacode.CSharp.Core.Controllers
         protected virtual async Task<ActionResult<IEnumerable<TEntity>>> Get()
         {
             var authorizedResult = await IsGetAuthorized().ConfigureAwait(false);
-            if (!authorizedResult.Item1)
-            {
-                return authorizedResult.Item2;
-            }
+            if (!authorizedResult.Item1) return authorizedResult.Item2;
 
             var results = await Repository.AsQueryable().ToListAsync().ConfigureAwait(false);
 
@@ -102,16 +90,10 @@ namespace Aptacode.CSharp.Core.Controllers
         protected virtual async Task<ActionResult<TEntity>> Get(int id)
         {
             var authorizedResult = await IsGetAuthorized(id).ConfigureAwait(false);
-            if (!authorizedResult.Item1)
-            {
-                return authorizedResult.Item2;
-            }
+            if (!authorizedResult.Item1) return authorizedResult.Item2;
 
             var result = await Repository.Get(id).ConfigureAwait(false);
-            if (result == null)
-            {
-                return NotFound();
-            }
+            if (result == null) return NotFound();
 
             return Ok(result);
         }
@@ -119,16 +101,10 @@ namespace Aptacode.CSharp.Core.Controllers
         protected virtual async Task<IActionResult> Delete(int id)
         {
             var entity = await Repository.Get(id).ConfigureAwait(false);
-            if (entity == null)
-            {
-                return NotFound();
-            }
+            if (entity == null) return NotFound();
 
             var authorizedResult = await IsDeleteAuthorized(entity).ConfigureAwait(false);
-            if (!authorizedResult.Item1)
-            {
-                return authorizedResult.Item2;
-            }
+            if (!authorizedResult.Item1) return authorizedResult.Item2;
 
             await Repository.Delete(id).ConfigureAwait(false);
             await UnitOfWork.Commit().ConfigureAwait(false);

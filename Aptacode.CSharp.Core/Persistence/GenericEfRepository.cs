@@ -40,10 +40,7 @@ namespace Aptacode.CSharp.Core.Persistence
         public virtual async Task Delete(int id)
         {
             var entity = await Get(id).ConfigureAwait(false);
-            if (entity != null)
-            {
-                DbSet.Remove(entity);
-            }
+            if (entity != null) DbSet.Remove(entity);
         }
 
         public IQueryable<TEntity> AsQueryable()

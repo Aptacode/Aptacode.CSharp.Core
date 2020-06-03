@@ -10,14 +10,16 @@ using Newtonsoft.Json;
 
 namespace Aptacode.CSharp.Core.Services
 {
-    public abstract class GenericHttpApiServiceClient<TEntity> : GenericHttpApiServiceClient<TEntity, TEntity> where TEntity : IEntity
+    public abstract class GenericHttpApiServiceClient<TEntity> : GenericHttpApiServiceClient<TEntity, TEntity>
+        where TEntity : IEntity
     {
-        protected GenericHttpApiServiceClient(IAccessTokenService authService, ServerAddress serverAddress, string apiRoute, string controllerRoute) : base(authService, serverAddress, apiRoute, controllerRoute)
+        protected GenericHttpApiServiceClient(IAccessTokenService authService, ServerAddress serverAddress,
+            string apiRoute, string controllerRoute) : base(authService, serverAddress, apiRoute, controllerRoute)
         {
         }
     }
 
-    public abstract class GenericHttpApiServiceClient<TGetViewModel, TPutViewModel> : IGenericHttpService<TGetViewModel, TPutViewModel>
+    public abstract class GenericHttpApiServiceClient<TGetViewModel, TPutViewModel>
     {
         protected static HttpClient HttpClient = new HttpClient();
         protected readonly HttpRouteBuilder ApiRouteBuilder;
@@ -31,7 +33,7 @@ namespace Aptacode.CSharp.Core.Services
             AuthService = authService;
         }
 
-        public async Task<IEnumerable<TGetViewModel>> Get()
+        protected async Task<IEnumerable<TGetViewModel>> Get()
         {
             var response = await HttpClient.SendAsync(GetRequestTemplate(HttpMethod.Get, ApiRouteBuilder.GetRoute()));
             if (response.IsSuccessStatusCode)
@@ -39,13 +41,11 @@ namespace Aptacode.CSharp.Core.Services
                 var body = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<IEnumerable<TGetViewModel>>(body);
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
-        public async Task<TGetViewModel> Get(int id)
+        protected async Task<TGetViewModel> Get(int id)
         {
             var response =
                 await HttpClient.SendAsync(GetRequestTemplate(HttpMethod.Get, ApiRouteBuilder.GetRoute(id.ToString())));
@@ -55,13 +55,11 @@ namespace Aptacode.CSharp.Core.Services
                 var body = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<TGetViewModel>(body);
             }
-            else
-            {
-                return default;
-            }
+
+            return default;
         }
 
-        public async Task<TGetViewModel> Put(TPutViewModel entity)
+        protected async Task<TGetViewModel> Put(TPutViewModel entity)
         {
             var req = GetRequestTemplate(HttpMethod.Put, ApiRouteBuilder.GetRoute());
             req.Content = new StringContent(JsonConvert.SerializeObject(entity));
@@ -71,13 +69,11 @@ namespace Aptacode.CSharp.Core.Services
                 var body = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<TGetViewModel>(body);
             }
-            else
-            {
-                return default;
-            }
+
+            return default;
         }
 
-        public async Task<TGetViewModel> Push(int id, TPutViewModel entity)
+        protected async Task<TGetViewModel> Push(int id, TPutViewModel entity)
         {
             var req = GetRequestTemplate(HttpMethod.Put, ApiRouteBuilder.GetRoute(id.ToString()));
             req.Content = new StringContent(JsonConvert.SerializeObject(entity));
@@ -87,26 +83,21 @@ namespace Aptacode.CSharp.Core.Services
                 var body = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<TGetViewModel>(body);
             }
-            else
-            {
-                return default;
-            }
+
+            return default;
         }
 
-        public async Task<bool> Delete(int id)
+        protected async Task<bool> Delete(int id)
         {
             var req = GetRequestTemplate(HttpMethod.Delete, ApiRouteBuilder.GetRoute(id.ToString()));
             var response = await HttpClient.SendAsync(req);
             return response.IsSuccessStatusCode;
         }
 
-        public HttpRequestMessage GetRequestTemplate(HttpMethod method, string endpoint)
+        protected HttpRequestMessage GetRequestTemplate(HttpMethod method, string endpoint)
         {
             var accessToken = AuthService.GetAccessToken();
-            if (accessToken == null)
-            {
-                throw new Exception("You are not authorized to view this content");
-            }
+            if (accessToken == null) throw new Exception("You are not authorized to view this content");
 
             var req = new HttpRequestMessage {Method = method, RequestUri = new Uri(endpoint)};
             req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

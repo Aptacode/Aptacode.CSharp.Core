@@ -21,22 +21,19 @@ namespace Aptacode.CSharp.Core.Controllers.AutoMapper
         AutoMapperGenericController<TGetViewModel, TPutViewModel, TEntity> : GenericController<TEntity>
         where TEntity : IEntity
     {
-        protected IMapper Mapper { get; }
-
         protected AutoMapperGenericController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork)
         {
             Mapper = mapper;
         }
+
+        protected IMapper Mapper { get; }
 
 
         protected new virtual async Task<ActionResult<TGetViewModel>> Get(int id)
         {
             var response = await base.Get(id).ConfigureAwait(false);
 
-            if (response.Value != null)
-            {
-                return Ok(Mapper.Map<TGetViewModel>(response.Value));
-            }
+            if (response.Value != null) return Ok(Mapper.Map<TGetViewModel>(response.Value));
 
             return response.Result;
         }
@@ -45,10 +42,7 @@ namespace Aptacode.CSharp.Core.Controllers.AutoMapper
         {
             var response = await base.Get().ConfigureAwait(false);
 
-            if (response.Value != null)
-            {
-                return Ok(response.Value.Select(r => Mapper.Map<TGetViewModel>(r)));
-            }
+            if (response.Value != null) return Ok(response.Value.Select(r => Mapper.Map<TGetViewModel>(r)));
 
             return response.Result;
         }
@@ -58,10 +52,7 @@ namespace Aptacode.CSharp.Core.Controllers.AutoMapper
             var entity = Mapper.Map<TEntity>(viewModel);
             var response = await base.Put(id, entity).ConfigureAwait(false);
 
-            if (response.Value != null)
-            {
-                return Ok(Mapper.Map<TGetViewModel>(response.Value));
-            }
+            if (response.Value != null) return Ok(Mapper.Map<TGetViewModel>(response.Value));
 
             return response.Result;
         }
@@ -71,10 +62,7 @@ namespace Aptacode.CSharp.Core.Controllers.AutoMapper
             var entity = Mapper.Map<TEntity>(viewModel);
 
             var response = await base.Post(entity).ConfigureAwait(false);
-            if (response.Value != null)
-            {
-                return Ok(Mapper.Map<TGetViewModel>(response.Value));
-            }
+            if (response.Value != null) return Ok(Mapper.Map<TGetViewModel>(response.Value));
 
             return response.Result;
         }
