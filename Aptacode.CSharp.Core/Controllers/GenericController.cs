@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Aptacode.CSharp.Utilities.Persistence;
 using Aptacode.CSharp.Utilities.Persistence.UnitOfWork;
@@ -63,9 +65,22 @@ namespace Aptacode.CSharp.Core.Controllers
 
             return Ok(entity);
         }
+        
 
-        protected virtual async Task<ActionResult<IEnumerable<TEntity>>> Get<TEntity>(
-            Func<Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
+        protected virtual async Task<ActionResult<IEnumerable<TEntity>>> Get<TEntity>(Expression<Func<TEntity, bool>> queryExpression, Func<Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
+        {
+            if (validator != null)
+            {
+                var (isValid, statusCodeResult) = await validator().ConfigureAwait(false);
+                if (!isValid) return statusCodeResult;
+            }
+
+            var results = await UnitOfWork.Repository<TEntity>().AsQueryable().Where(queryExpression).ToListAsync().ConfigureAwait(false);
+
+            return Ok(results);
+        }
+
+        protected virtual async Task<ActionResult<IEnumerable<TEntity>>> Get<TEntity>(Func<Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
         {
             if (validator != null)
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Aptacode.CSharp.Utilities.Persistence;
 using Aptacode.CSharp.Utilities.Persistence.UnitOfWork;
@@ -32,6 +33,15 @@ namespace Aptacode.CSharp.Core.Controllers.AutoMapper
             Func<Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
         {
             var response = await base.Get<TEntity>(validator).ConfigureAwait(false);
+
+            if (response.Value != null) return Ok(response.Value.Select(r => Mapper.Map<TViewModel>(r)));
+
+            return response.Result;
+        }
+
+        protected virtual async Task<ActionResult<IEnumerable<TViewModel>>> Get<TViewModel, TEntity>(Expression<Func<TEntity, bool>> queryExpression, Func<Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
+        {
+            var response = await base.Get(queryExpression, validator).ConfigureAwait(false);
 
             if (response.Value != null) return Ok(response.Value.Select(r => Mapper.Map<TViewModel>(r)));
 
