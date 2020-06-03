@@ -54,6 +54,7 @@ namespace Aptacode.CSharp.Core.Controllers
             }
 
             await UnitOfWork.Repository<TEntity>().Create(entity).ConfigureAwait(false);
+
             try
             {
                 await UnitOfWork.Commit().ConfigureAwait(false);
