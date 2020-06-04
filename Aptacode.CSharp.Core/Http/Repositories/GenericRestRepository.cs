@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Aptacode.CSharp.Core.Http;
-using Aptacode.CSharp.Core.Services;
-using Aptacode.CSharp.Core.Services.Interfaces;
+using Aptacode.CSharp.Core.Http.Services;
+using Aptacode.CSharp.Core.Http.Services.Interfaces;
 using Aptacode.CSharp.Utilities.Persistence;
 using Aptacode.CSharp.Utilities.Persistence.Cache;
 using Aptacode.CSharp.Utilities.Persistence.Repository;
 using AutoMapper;
 
-namespace Aptacode.CSharp.Core.Persistence.Repositories
+namespace Aptacode.CSharp.Core.Http.Repositories
 {
     public class GenericRestRepository<TGetViewModel, TPutViewModel, TEntity> : GenericHttpApiServiceClient,
         IRepository<TEntity>

@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Aptacode.CSharp.Core.Http;
-using Aptacode.CSharp.Core.Services.Interfaces;
+using Aptacode.CSharp.Core.Http.Services.Interfaces;
 using Newtonsoft.Json;
 
-namespace Aptacode.CSharp.Core.Services
+namespace Aptacode.CSharp.Core.Http.Services
 {
     public abstract class GenericHttpApiServiceClient
     {

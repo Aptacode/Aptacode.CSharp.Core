@@ -1,4 +1,4 @@
-﻿namespace Aptacode.CSharp.Core.Services.Interfaces
+﻿namespace Aptacode.CSharp.Core.Http.Services.Interfaces
 {
     public interface IAccessTokenService
     {

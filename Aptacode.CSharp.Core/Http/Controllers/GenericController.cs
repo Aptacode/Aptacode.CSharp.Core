@@ -16,13 +16,13 @@ namespace Aptacode.CSharp.Core.Controllers
 
         protected GenericController(IGenericUnitOfWork unitOfWork)
         {
-            UnitOfWork = unitOfWork;
+            UnitOfWork = unitOfWork ?? throw new NullReferenceException("IGenericUnitOfWork was null");
         }
 
         protected virtual async Task<ActionResult<TEntity>> Post<TEntity>(int id, TEntity entity,
             Func<TEntity, Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
         {
-            if (id != entity.Id) return BadRequest();
+            if (id != entity.Id) return BadRequest("Entity Id did not match");
 
             if (validator != null)
             {
@@ -30,10 +30,9 @@ namespace Aptacode.CSharp.Core.Controllers
                 if (!isValid) return statusCodeResult;
             }
 
-            await UnitOfWork.Repository<TEntity>().Update(entity).ConfigureAwait(false);
-
             try
             {
+                await UnitOfWork.Repository<TEntity>().Update(entity).ConfigureAwait(false);
                 await UnitOfWork.Commit().ConfigureAwait(false);
             }
             catch
@@ -53,10 +52,9 @@ namespace Aptacode.CSharp.Core.Controllers
                 if (!isValid) return statusCodeResult;
             }
 
-            await UnitOfWork.Repository<TEntity>().Create(entity).ConfigureAwait(false);
-
             try
             {
+                await UnitOfWork.Repository<TEntity>().Create(entity).ConfigureAwait(false);
                 await UnitOfWork.Commit().ConfigureAwait(false);
             }
             catch
@@ -78,10 +76,18 @@ namespace Aptacode.CSharp.Core.Controllers
                 if (!isValid) return statusCodeResult;
             }
 
-            var results = await UnitOfWork.Repository<TEntity>().AsQueryable().Where(queryExpression).ToListAsync()
-                .ConfigureAwait(false);
+            try
+            {
+                var results = await UnitOfWork.Repository<TEntity>().AsQueryable().Where(queryExpression).ToListAsync()
+                    .ConfigureAwait(false);
+                return Ok(results);
+            }
+            catch
+            {
+                return BadRequest();
+            }
 
-            return Ok(results);
+
         }
 
         protected virtual async Task<ActionResult<IEnumerable<TEntity>>> Get<TEntity>(
@@ -93,12 +99,18 @@ namespace Aptacode.CSharp.Core.Controllers
                 if (!isValid) return statusCodeResult;
             }
 
-            var results = await UnitOfWork.Repository<TEntity>().AsQueryable().ToListAsync().ConfigureAwait(false);
-
-            return Ok(results);
+            try
+            {
+                var results = await UnitOfWork.Repository<TEntity>().AsQueryable().ToListAsync().ConfigureAwait(false);
+                return Ok(results);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
-        protected virtual async Task<ActionResult<IEnumerable<TEntity>>> Get<TEntity>(int id,
+        protected virtual async Task<ActionResult<TEntity>> Get<TEntity>(int id,
             Func<int, Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
         {
             if (validator != null)
@@ -107,10 +119,17 @@ namespace Aptacode.CSharp.Core.Controllers
                 if (!isValid) return statusCodeResult;
             }
 
-            var result = await UnitOfWork.Repository<TEntity>().Get(id).ConfigureAwait(false);
-            if (result == null) return NotFound();
+            try
+            {
+                var result = await UnitOfWork.Repository<TEntity>().Get(id).ConfigureAwait(false);
+                if (result == null) return NotFound();
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         protected virtual async Task<IActionResult> Delete<TEntity>(int id,
@@ -122,10 +141,9 @@ namespace Aptacode.CSharp.Core.Controllers
                 if (!isValid) return statusCodeResult;
             }
 
-            await UnitOfWork.Repository<TEntity>().Delete(id).ConfigureAwait(false);
-
             try
             {
+                await UnitOfWork.Repository<TEntity>().Delete(id).ConfigureAwait(false);
                 await UnitOfWork.Commit().ConfigureAwait(false);
             }
             catch
