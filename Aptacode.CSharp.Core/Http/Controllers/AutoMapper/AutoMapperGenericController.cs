@@ -12,19 +12,34 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
 {
     public abstract class AutoMapperGenericController : GenericController
     {
-        #region Properties
-        protected IMapper Mapper { get; }
-
-        #endregion
-
         protected AutoMapperGenericController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork)
         {
             Mapper = mapper ?? throw new NullReferenceException("IMapper was null");
         }
 
+        #region Properties
+
+        protected IMapper Mapper { get; }
+
+        #endregion
+
+        //Maps an ActionResult<TEntity> to An ActionResult<TViewModel>
+        private ActionResult<TViewModel> MapResponse<TEntity, TViewModel>(ActionResult<TEntity> response)
+        {
+            return response.Value != null ? Ok(Mapper.Map<TViewModel>(response.Value)) : response.Result;
+        }
+
+        //Maps an ActionResult<IEnumerable<TEntity>> to An ActionResult<IEnumerable<TViewModel>>
+        private ActionResult<IEnumerable<TViewModel>> MapResponse<TEntity, TViewModel>(
+            ActionResult<IEnumerable<TEntity>> response)
+        {
+            return response.Value != null ? Ok(response.Value.Select(r => Mapper.Map<TViewModel>(r))) : response.Result;
+        }
+
         #region HttpMethods
 
-        protected virtual async Task<ActionResult<TViewModel>> Get<TViewModel, TEntity>(int id, Func<int, Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
+        protected virtual async Task<ActionResult<TViewModel>> Get<TViewModel, TEntity>(int id,
+            Func<int, Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
         {
             var response = await base.Get<TEntity>(id, validator).ConfigureAwait(false);
             return MapResponse<TEntity, TViewModel>(response);
@@ -64,17 +79,5 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         }
 
         #endregion
-
-        //Maps an ActionResult<TEntity> to An ActionResult<TViewModel>
-        private ActionResult<TViewModel> MapResponse<TEntity, TViewModel>(ActionResult<TEntity> response)
-        {
-            return response.Value != null ? Ok(Mapper.Map<TViewModel>(response.Value)) : response.Result;
-        }
-
-        //Maps an ActionResult<IEnumerable<TEntity>> to An ActionResult<IEnumerable<TViewModel>>
-        private ActionResult<IEnumerable<TViewModel>> MapResponse<TEntity, TViewModel>(ActionResult<IEnumerable<TEntity>> response)
-        {
-            return response.Value != null ? Ok(response.Value.Select(r => Mapper.Map<TViewModel>(r))) : response.Result;
-        }
     }
 }
