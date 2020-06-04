@@ -7,14 +7,16 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>MIT</Copyright>
-    <Version>1.0.2.10</Version>
-    <AssemblyVersion>1.0.2.10</AssemblyVersion>
-    <FileVersion>1.0.2.10</FileVersion>
+    <Version>1.0.2.11</Version>
+    <AssemblyVersion>1.0.2.11</AssemblyVersion>
+    <FileVersion>1.0.2.11</FileVersion>
     <PackageId>Aptacode.CSharp.Core</PackageId>
-    <Authors>Aptacode.CSharp.Core</Authors>
-    <Company>Aptacode.CSharp.Core</Company>
+    <Authors>Aptacode</Authors>
+    <Company>Aptacode</Company>
     <Product>Aptacode.CSharp.Core</Product>
     <Description>A Collection of .Net Core Utilities and Helper classes</Description>
+    <PackageIcon>logo.png</PackageIcon>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +25,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="3.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Images\logo.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
