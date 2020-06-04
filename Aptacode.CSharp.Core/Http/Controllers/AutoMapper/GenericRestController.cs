@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Aptacode.CSharp.Utilities.Persistence;
-using Aptacode.CSharp.Utilities.Persistence.UnitOfWork;
+using Aptacode.CSharp.Common.Persistence;
+using Aptacode.CSharp.Common.Persistence.UnitOfWork;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,0 +1,3 @@
+[submodule "Libraries/Aptacode.CSharp.Common"]
+	path = Libraries/Aptacode.CSharp.Common
+	url = https://github.com/Timmoth/Aptacode.CSharp.Common.git

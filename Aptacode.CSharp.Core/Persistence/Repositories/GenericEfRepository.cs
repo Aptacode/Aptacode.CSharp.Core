@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Aptacode.CSharp.Utilities.Persistence;
-using Aptacode.CSharp.Utilities.Persistence.Repository;
+using Aptacode.CSharp.Common.Persistence;
+using Aptacode.CSharp.Common.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Aptacode.CSharp.Core.Persistence.Repositories

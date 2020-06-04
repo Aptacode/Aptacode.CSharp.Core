@@ -7,7 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aptacode.CSharp.Core", "Apt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8EA19F27-0853-49F0-BEFC-F418F086DB38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aptacode.CSharp.Core.Tests", "Aptacode.CSharp.Core.Tests\Aptacode.CSharp.Core.Tests.csproj", "{4D42A068-ED3D-4A09-9425-655F0C0C3220}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aptacode.CSharp.Core.Tests", "Aptacode.CSharp.Core.Tests\Aptacode.CSharp.Core.Tests.csproj", "{4D42A068-ED3D-4A09-9425-655F0C0C3220}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{71B91AA1-4607-49E3-8FAB-D00828140B65}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aptacode.CSharp.Common.Persistence", "Libraries\Aptacode.CSharp.Common\Aptacode.CSharp.Persistence\Aptacode.CSharp.Common.Persistence.csproj", "{F9128496-D98D-4912-B483-4CA8556A6BEF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aptacode.CSharp.Common.Http", "Libraries\Aptacode.CSharp.Common\Aptacode.CSharp.Http\Aptacode.CSharp.Common.Http.csproj", "{289C98F1-0341-4DF9-9A30-93BB170ACFC0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aptacode.CSharp.Common.Utillities", "Libraries\Aptacode.CSharp.Common\Aptacode.CSharp.Utillities\Aptacode.CSharp.Common.Utillities.csproj", "{1C57948B-2C9E-4F24-8BF8-C7901AA9C7C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,12 +31,27 @@ Global
 		{4D42A068-ED3D-4A09-9425-655F0C0C3220}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D42A068-ED3D-4A09-9425-655F0C0C3220}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D42A068-ED3D-4A09-9425-655F0C0C3220}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9128496-D98D-4912-B483-4CA8556A6BEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9128496-D98D-4912-B483-4CA8556A6BEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9128496-D98D-4912-B483-4CA8556A6BEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9128496-D98D-4912-B483-4CA8556A6BEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{289C98F1-0341-4DF9-9A30-93BB170ACFC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{289C98F1-0341-4DF9-9A30-93BB170ACFC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{289C98F1-0341-4DF9-9A30-93BB170ACFC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{289C98F1-0341-4DF9-9A30-93BB170ACFC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C57948B-2C9E-4F24-8BF8-C7901AA9C7C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C57948B-2C9E-4F24-8BF8-C7901AA9C7C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C57948B-2C9E-4F24-8BF8-C7901AA9C7C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C57948B-2C9E-4F24-8BF8-C7901AA9C7C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4D42A068-ED3D-4A09-9425-655F0C0C3220} = {8EA19F27-0853-49F0-BEFC-F418F086DB38}
+		{F9128496-D98D-4912-B483-4CA8556A6BEF} = {71B91AA1-4607-49E3-8FAB-D00828140B65}
+		{289C98F1-0341-4DF9-9A30-93BB170ACFC0} = {71B91AA1-4607-49E3-8FAB-D00828140B65}
+		{1C57948B-2C9E-4F24-8BF8-C7901AA9C7C3} = {71B91AA1-4607-49E3-8FAB-D00828140B65}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3FA67589-B89D-4EAC-B113-6CD5B8F73F15}

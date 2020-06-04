@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Aptacode.CSharp.Utilities.Persistence;
-using Aptacode.CSharp.Utilities.Persistence.UnitOfWork;
+using Aptacode.CSharp.Common.Persistence;
+using Aptacode.CSharp.Common.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
