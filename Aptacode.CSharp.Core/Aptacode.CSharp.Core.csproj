@@ -7,9 +7,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>MIT</Copyright>
-    <Version>1.0.2.9</Version>
-    <AssemblyVersion>1.0.2.9</AssemblyVersion>
-    <FileVersion>1.0.2.9</FileVersion>
+    <Version>1.0.2.10</Version>
+    <AssemblyVersion>1.0.2.10</AssemblyVersion>
+    <FileVersion>1.0.2.10</FileVersion>
     <PackageId>Aptacode.CSharp.Core</PackageId>
     <Authors>Aptacode.CSharp.Core</Authors>
     <Company>Aptacode.CSharp.Core</Company>
@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aptacode.CSharp.Utilities" Version="1.0.0.6" />
+    <PackageReference Include="Aptacode.CSharp.Utilities" Version="1.0.0.7" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="3.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />

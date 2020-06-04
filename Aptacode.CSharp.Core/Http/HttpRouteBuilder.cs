@@ -14,7 +14,7 @@
 
         public string BuildRoute(params string[] routeSegments)
         {
-            return $@"{ApiBaseRoute}{string.Join(RouteSeparator, routeSegments)}";
+            return $"{ApiBaseRoute}{string.Join(RouteSeparator, routeSegments)}";
         }
     }
 }

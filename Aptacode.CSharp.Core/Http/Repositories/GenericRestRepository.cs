@@ -62,7 +62,7 @@ namespace Aptacode.CSharp.Core.Http.Repositories
                 var result = await base.Get<TGetViewModel>(_apiBaseRoute.Append(id.ToString()).ToArray())
                     .ConfigureAwait(false);
                 return _mapper.Map<TEntity>(result);
-            });
+            }).ConfigureAwait(false);
         }
 
         public async Task Delete(int id)

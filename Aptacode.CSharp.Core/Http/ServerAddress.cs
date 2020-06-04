@@ -7,7 +7,6 @@ namespace Aptacode.CSharp.Core.Http
         public string Protocol { get; set; }
         public string Address { get; set; }
         public string Port { get; set; }
-        
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();

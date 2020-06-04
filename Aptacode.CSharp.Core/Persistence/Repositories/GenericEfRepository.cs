@@ -16,15 +16,16 @@ namespace Aptacode.CSharp.Core.Persistence.Repositories
 
         protected DbSet<TEntity> DbSet { get; }
 
-        public virtual async Task<int> Create(TEntity entity)
+        public virtual Task<int> Create(TEntity entity)
         {
             DbSet.Add(entity);
-            return 0;
+            return Task.FromResult(0);
         }
 
-        public virtual async Task Update(TEntity entity)
+        public virtual Task Update(TEntity entity)
         {
             DbSet.Attach(entity);
+            return Task.CompletedTask;
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAll()

@@ -65,7 +65,6 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             return Ok(entity);
         }
 
-
         protected virtual async Task<ActionResult<IEnumerable<TEntity>>> Get<TEntity>(
             Expression<Func<TEntity, bool>> queryExpression, Func<Task<(bool, StatusCodeResult)>> validator = null)
             where TEntity : IEntity
@@ -86,8 +85,6 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             {
                 return BadRequest();
             }
-
-
         }
 
         protected virtual async Task<ActionResult<IEnumerable<TEntity>>> Get<TEntity>(
