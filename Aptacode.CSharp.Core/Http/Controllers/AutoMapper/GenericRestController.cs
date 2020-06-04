@@ -5,7 +5,7 @@ using Aptacode.CSharp.Utilities.Persistence.UnitOfWork;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aptacode.CSharp.Core.Controllers.AutoMapper
+namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
 {
     public class GenericRestController<TGetViewModel, TPutViewModel, TEntity> : AutoMapperGenericController
         where TEntity : IEntity

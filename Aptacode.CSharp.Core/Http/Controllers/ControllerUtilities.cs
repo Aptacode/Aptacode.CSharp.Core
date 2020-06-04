@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 
-namespace Aptacode.CSharp.Core.Controllers
+namespace Aptacode.CSharp.Core.Http.Controllers
 {
     public static class ControllerUtilities
     {

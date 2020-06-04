@@ -3,16 +3,18 @@
     public class HttpRouteBuilder
     {
         private const string RouteSeparator = "/";
-        private readonly string _apiBaseRoute;
+        public string ApiBaseRoute { get; }
+        public ServerAddress ServerAddress { get; }
 
         public HttpRouteBuilder(ServerAddress serverAddress, params string[] baseRouteSegments)
         {
-            _apiBaseRoute = $"{serverAddress}{string.Join(RouteSeparator, baseRouteSegments)}";
+            ServerAddress = serverAddress;
+            ApiBaseRoute = $"{serverAddress}{string.Join(RouteSeparator, baseRouteSegments)}";
         }
 
-        public string GetRoute(params string[] routeSegments)
+        public string BuildRoute(params string[] routeSegments)
         {
-            return $"{_apiBaseRoute}{string.Join(RouteSeparator, routeSegments)}";
+            return $@"{ApiBaseRoute}{string.Join(RouteSeparator, routeSegments)}";
         }
     }
 }
