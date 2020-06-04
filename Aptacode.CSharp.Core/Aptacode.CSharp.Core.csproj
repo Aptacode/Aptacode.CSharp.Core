@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <PackageProjectUrl>https://github.com/Timmoth/Aptacode.NetCore.git</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Timmoth/Aptacode.NetCore.git</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/Timmoth/Aptacode.CSharp.Core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Timmoth/Aptacode.CSharp.Core</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>MIT</Copyright>
@@ -14,6 +14,7 @@
     <Authors>Aptacode.CSharp.Core</Authors>
     <Company>Aptacode.CSharp.Core</Company>
     <Product>Aptacode.CSharp.Core</Product>
+    <Description>A Collection of .Net Core Utilities and Helper classes</Description>
   </PropertyGroup>
 
   <ItemGroup>
