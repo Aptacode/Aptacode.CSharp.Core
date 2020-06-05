@@ -41,6 +41,6 @@ namespace Aptacode.CSharp.Core.Persistence.Repositories
             }
         }
 
-        public IQueryable<TEntity> AsQueryable() => DbSet.AsQueryable();
+        public virtual IQueryable<TEntity> AsQueryable() => DbSet.AsQueryable();
     }
 }

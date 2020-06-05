@@ -40,14 +40,14 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
             Func<int, Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
         {
             var response = await base.Get<TEntity>(id, validator).ConfigureAwait(false);
-            return MapResponse<TEntity, TViewModel>(response);
+            return response.Value != null ? Ok(MapResponse<TEntity, TViewModel>(response)) : response.Result;
         }
 
         protected virtual async Task<ActionResult<IEnumerable<TViewModel>>> Get<TViewModel, TEntity>(
             Func<Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
         {
             var response = await base.Get<TEntity>(validator).ConfigureAwait(false);
-            return MapResponse<TEntity, TViewModel>(response);
+            return response.Value != null ? Ok(MapResponse<TEntity, TViewModel>(response)) : response.Result;
         }
 
         protected virtual async Task<ActionResult<IEnumerable<TViewModel>>> Get<TViewModel, TEntity>(
@@ -55,7 +55,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
             where TEntity : IEntity
         {
             var response = await base.Get(queryExpression, validator).ConfigureAwait(false);
-            return MapResponse<TEntity, TViewModel>(response);
+            return response.Value != null ? Ok(MapResponse<TEntity, TViewModel>(response)) : response.Result;
         }
 
         protected virtual async Task<ActionResult<TGetViewModel>> Post<TGetViewModel, TPostViewModel, TEntity>(int id,
@@ -64,7 +64,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         {
             var entity = Mapper.Map<TEntity>(viewModel);
             var response = await base.Post(id, entity, validator).ConfigureAwait(false);
-            return MapResponse<TEntity, TGetViewModel>(response);
+            return response.Value != null ? Ok(MapResponse<TEntity, TGetViewModel>(response)) : response.Result;
         }
 
         protected virtual async Task<ActionResult<TGetViewModel>> Put<TGetViewModel, TPostViewModel, TEntity>(
@@ -73,7 +73,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         {
             var entity = Mapper.Map<TEntity>(viewModel);
             var response = await base.Put(entity, validator).ConfigureAwait(false);
-            return MapResponse<TEntity, TGetViewModel>(response);
+            return response.Value != null ? Ok(MapResponse<TEntity, TGetViewModel>(response)) : response.Result;
         }
 
         #endregion

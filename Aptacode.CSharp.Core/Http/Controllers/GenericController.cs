@@ -43,7 +43,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Database Exception");
             }
 
             return Ok(entity);
@@ -68,7 +68,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Database Exception");
             }
 
             return Ok(entity);
@@ -95,7 +95,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Database Exception");
             }
         }
 
@@ -118,7 +118,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Database Exception");
             }
         }
 
@@ -146,7 +146,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Database Exception");
             }
         }
 
@@ -169,7 +169,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
             catch
             {
-                return BadRequest();
+                return BadRequest("Database Exception");
             }
 
             return Ok();
