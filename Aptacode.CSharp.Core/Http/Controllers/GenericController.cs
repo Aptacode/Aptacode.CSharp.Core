@@ -22,12 +22,18 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         protected virtual async Task<ActionResult<TEntity>> Post<TEntity>(int id, TEntity entity,
             Func<TEntity, Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
         {
-            if (id != entity.Id) return BadRequest("Entity Id did not match");
+            if (id != entity.Id)
+            {
+                return BadRequest("Entity Id did not match");
+            }
 
             if (validator != null)
             {
                 var (isValid, statusCodeResult) = await validator(entity).ConfigureAwait(false);
-                if (!isValid) return statusCodeResult;
+                if (!isValid)
+                {
+                    return statusCodeResult;
+                }
             }
 
             try
@@ -49,7 +55,10 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             if (validator != null)
             {
                 var (isValid, statusCodeResult) = await validator(entity).ConfigureAwait(false);
-                if (!isValid) return statusCodeResult;
+                if (!isValid)
+                {
+                    return statusCodeResult;
+                }
             }
 
             try
@@ -72,7 +81,10 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             if (validator != null)
             {
                 var (isValid, statusCodeResult) = await validator().ConfigureAwait(false);
-                if (!isValid) return statusCodeResult;
+                if (!isValid)
+                {
+                    return statusCodeResult;
+                }
             }
 
             try
@@ -93,7 +105,10 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             if (validator != null)
             {
                 var (isValid, statusCodeResult) = await validator().ConfigureAwait(false);
-                if (!isValid) return statusCodeResult;
+                if (!isValid)
+                {
+                    return statusCodeResult;
+                }
             }
 
             try
@@ -113,13 +128,19 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             if (validator != null)
             {
                 var (isValid, statusCodeResult) = await validator(id).ConfigureAwait(false);
-                if (!isValid) return statusCodeResult;
+                if (!isValid)
+                {
+                    return statusCodeResult;
+                }
             }
 
             try
             {
                 var result = await UnitOfWork.Repository<TEntity>().Get(id).ConfigureAwait(false);
-                if (result == null) return NotFound();
+                if (result == null)
+                {
+                    return NotFound();
+                }
 
                 return Ok(result);
             }
@@ -135,7 +156,10 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             if (validator != null)
             {
                 var (isValid, statusCodeResult) = await validator(id).ConfigureAwait(false);
-                if (!isValid) return statusCodeResult;
+                if (!isValid)
+                {
+                    return statusCodeResult;
+                }
             }
 
             try

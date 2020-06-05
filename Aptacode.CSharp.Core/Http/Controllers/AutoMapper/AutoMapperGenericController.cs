@@ -24,10 +24,8 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         #endregion
 
         //Maps an ActionResult<TEntity> to An ActionResult<TViewModel>
-        private ActionResult<TViewModel> MapResponse<TEntity, TViewModel>(ActionResult<TEntity> response)
-        {
-            return response.Value != null ? Ok(Mapper.Map<TViewModel>(response.Value)) : response.Result;
-        }
+        private ActionResult<TViewModel> MapResponse<TEntity, TViewModel>(ActionResult<TEntity> response) =>
+            response.Value != null ? Ok(Mapper.Map<TViewModel>(response.Value)) : response.Result;
 
         //Maps an ActionResult<IEnumerable<TEntity>> to An ActionResult<IEnumerable<TViewModel>>
         private ActionResult<IEnumerable<TViewModel>> MapResponse<TEntity, TViewModel>(

@@ -28,25 +28,19 @@ namespace Aptacode.CSharp.Core.Persistence.Repositories
             return Task.CompletedTask;
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAll()
-        {
-            return await DbSet.ToListAsync().ConfigureAwait(false);
-        }
+        public virtual async Task<IEnumerable<TEntity>> GetAll() => await DbSet.ToListAsync().ConfigureAwait(false);
 
-        public virtual async Task<TEntity> Get(int id)
-        {
-            return await DbSet.FindAsync(id).ConfigureAwait(false);
-        }
+        public virtual async Task<TEntity> Get(int id) => await DbSet.FindAsync(id).ConfigureAwait(false);
 
         public virtual async Task Delete(int id)
         {
             var entity = await Get(id).ConfigureAwait(false);
-            if (entity != null) DbSet.Remove(entity);
+            if (entity != null)
+            {
+                DbSet.Remove(entity);
+            }
         }
 
-        public IQueryable<TEntity> AsQueryable()
-        {
-            return DbSet.AsQueryable();
-        }
+        public IQueryable<TEntity> AsQueryable() => DbSet.AsQueryable();
     }
 }
