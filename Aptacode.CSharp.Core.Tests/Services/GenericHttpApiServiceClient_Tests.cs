@@ -2,7 +2,7 @@ using Xunit;
 
 namespace Aptacode.CSharp.Core.Tests.Services
 {
-    public class GenericHttpApiServiceClient_Tests
+    public class GenericHttpApiServiceClientTests
     {
         [Fact]
         public void Test1()
