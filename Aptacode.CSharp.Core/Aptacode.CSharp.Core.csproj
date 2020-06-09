@@ -7,9 +7,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>MIT</Copyright>
-    <Version>1.0.2.13</Version>
-    <AssemblyVersion>1.0.2.13</AssemblyVersion>
-    <FileVersion>1.0.2.13</FileVersion>
+    <Version>1.0.2.14</Version>
+    <AssemblyVersion>1.0.2.14</AssemblyVersion>
+    <FileVersion>1.0.2.14</FileVersion>
     <PackageId>Aptacode.CSharp.Core</PackageId>
     <Authors>Aptacode</Authors>
     <Company>Aptacode</Company>
@@ -27,12 +27,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aptacode.CSharp.Common.Persistence" Version="1.0.0.8" />
+    <PackageReference Include="Aptacode.CSharp.Common.Persistence" Version="1.0.0.12" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="3.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.5" />
   </ItemGroup>
 
   <ItemGroup>

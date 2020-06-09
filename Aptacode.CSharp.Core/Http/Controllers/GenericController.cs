@@ -22,9 +22,14 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         protected virtual async Task<ActionResult<TEntity>> Post<TEntity>(int id, TEntity entity,
             Func<TEntity, Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
         {
+            if (entity == null)
+            {
+                return BadRequest("Null Entity was given");
+            }
+
             if (id != entity.Id)
             {
-                return BadRequest("Entity Id did not match");
+                return BadRequest("Entity's Id did not match");
             }
 
             if (validator != null)
@@ -43,7 +48,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
             catch
             {
-                return BadRequest("Database Exception");
+                return BadRequest("Database error");
             }
 
             return Ok(entity);
@@ -52,6 +57,11 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         protected virtual async Task<ActionResult<TEntity>> Put<TEntity>(TEntity entity,
             Func<TEntity, Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
         {
+            if (entity == null)
+            {
+                return BadRequest("Null Entity was given");
+            }
+
             if (validator != null)
             {
                 var (isValid, statusCodeResult) = await validator(entity).ConfigureAwait(false);
@@ -68,7 +78,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
             catch
             {
-                return BadRequest("Database Exception");
+                return BadRequest("Database error");
             }
 
             return Ok(entity);
@@ -95,7 +105,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
             catch
             {
-                return BadRequest("Database Exception");
+                return BadRequest("Database error");
             }
         }
 
@@ -118,7 +128,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
             catch
             {
-                return BadRequest("Database Exception");
+                return BadRequest("Database error");
             }
         }
 
@@ -146,7 +156,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
             catch
             {
-                return BadRequest("Database Exception");
+                return BadRequest("Database error");
             }
         }
 
@@ -169,7 +179,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
             catch
             {
-                return BadRequest("Database Exception");
+                return BadRequest("Database error");
             }
 
             return Ok();
