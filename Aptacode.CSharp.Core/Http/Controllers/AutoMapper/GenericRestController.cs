@@ -35,4 +35,34 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
 
         #endregion
     }
+
+
+    public class GenericRestController<TViewModel, TEntity> : AutoMapperGenericController
+    where TEntity : IEntity
+    {
+        public GenericRestController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
+
+        #region HttpMethods
+
+        [HttpPost("{id}")]
+        public async Task<ActionResult<TViewModel>> Post(int id, [FromBody] TViewModel viewModel) =>
+            await base.Post<TViewModel, TViewModel, TEntity>(id, viewModel).ConfigureAwait(false);
+
+        [HttpPut]
+        public async Task<ActionResult<TViewModel>> Put([FromBody] TViewModel viewModel) =>
+            await base.Put<TViewModel, TViewModel, TEntity>(viewModel).ConfigureAwait(false);
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TViewModel>>> Get() =>
+            await base.Get<TViewModel, TEntity>().ConfigureAwait(false);
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TViewModel>> Get(int id) =>
+            await base.Get<TViewModel, TEntity>(id).ConfigureAwait(false);
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id) => await base.Delete<TEntity>(id).ConfigureAwait(false);
+
+        #endregion
+    }
 }
