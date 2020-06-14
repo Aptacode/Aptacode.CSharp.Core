@@ -24,7 +24,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         #endregion
 
         //Maps an ActionResult<TEntity> to An ActionResult<TViewModel>
-        private ActionResult<TViewModel> MapResponse<TEntity, TViewModel>(ServerResponse<TEntity> response)
+        public ActionResult<TViewModel> MapResponse<TEntity, TViewModel>(ServerResponse<TEntity> response)
         {
             if (!response.HasValue)
             {
@@ -37,8 +37,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         }
 
         //Maps an ActionResult<IEnumerable<TEntity>> to An ActionResult<IEnumerable<TViewModel>>
-        private ActionResult<IEnumerable<TViewModel>> MapResponse<TEntity, TViewModel>(
-            ServerResponse<IEnumerable<TEntity>> response)
+        public ActionResult<IEnumerable<TViewModel>> MapResponse<TEntity, TViewModel>(ServerResponse<IEnumerable<TEntity>> response)
         {
             if (!response.HasValue)
             {
@@ -76,6 +75,15 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
             return MapResponse<TEntity, TGetViewModel>(response);
         }
 
+        protected virtual async Task<ActionResult<TViewModel>> Post<TViewModel, TEntity>(int id,
+            TViewModel viewModel, Validator<TEntity> validator = null)
+            where TEntity : IEntity
+        {
+            var entity = Mapper.Map<TEntity>(viewModel);
+            var response = await base.Post(id, entity, validator).ConfigureAwait(false);
+            return MapResponse<TEntity, TViewModel>(response);
+        }
+
         protected virtual async Task<ActionResult<TGetViewModel>> Put<TGetViewModel, TPostViewModel, TEntity>(
             TPostViewModel viewModel, Validator<TEntity> validator = null)
             where TEntity : IEntity
@@ -83,6 +91,15 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
             var entity = Mapper.Map<TEntity>(viewModel);
             var response = await base.Put(entity, validator).ConfigureAwait(false);
             return MapResponse<TEntity, TGetViewModel>(response);
+        }
+
+        protected virtual async Task<ActionResult<TViewModel>> Put<TViewModel, TEntity>(
+            TViewModel viewModel, Validator<TEntity> validator = null)
+            where TEntity : IEntity
+        {
+            var entity = Mapper.Map<TEntity>(viewModel);
+            var response = await base.Put(entity, validator).ConfigureAwait(false);
+            return MapResponse<TEntity, TViewModel>(response);
         }
 
         protected virtual async Task<ActionResult<bool>> Delete<TEntity>(int id) where TEntity : IEntity
