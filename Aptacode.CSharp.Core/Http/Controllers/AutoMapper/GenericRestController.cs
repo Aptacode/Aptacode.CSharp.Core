@@ -15,23 +15,41 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         #region HttpMethods
 
         [HttpPost("{id}")]
-        public async Task<ActionResult<TGetViewModel>> Post(int id, [FromBody] TPutViewModel viewModel) =>
-            await base.Post<TGetViewModel, TPutViewModel, TEntity>(id, viewModel).ConfigureAwait(false);
+        public async Task<ActionResult<TGetViewModel>> Post(int id, [FromBody] TPutViewModel viewModel)
+        {
+            var model = Mapper.Map<TEntity>(viewModel);
+            var result = await base.Post(id, model).ConfigureAwait(false);
+            return MapResponse<TEntity, TGetViewModel>(result);
+        }
 
         [HttpPut]
-        public async Task<ActionResult<TGetViewModel>> Put([FromBody] TPutViewModel viewModel) =>
-            await base.Put<TGetViewModel, TPutViewModel, TEntity>(viewModel).ConfigureAwait(false);
+        public async Task<ActionResult<TGetViewModel>> Put([FromBody] TPutViewModel viewModel)
+        {
+            var model = Mapper.Map<TEntity>(viewModel);
+            var result = await base.Put(model).ConfigureAwait(false);
+            return MapResponse<TEntity, TGetViewModel>(result);
+        }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TGetViewModel>>> Get() =>
-            await base.Get<TGetViewModel, TEntity>().ConfigureAwait(false);
+        public async Task<ActionResult<IEnumerable<TGetViewModel>>> Get()
+        { 
+            var result = await base.Get<TEntity>().ConfigureAwait(false);
+            return MapResponse<TEntity, TGetViewModel>(result);
+        }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TGetViewModel>> Get(int id) =>
-            await base.Get<TGetViewModel, TEntity>(id).ConfigureAwait(false);
+        public async Task<ActionResult<TGetViewModel>> Get(int id)
+        {
+            var result = await base.Get<TEntity>(id).ConfigureAwait(false);
+            return MapResponse<TEntity, TGetViewModel>(result);
+        }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<bool>> Delete(int id) => await base.Delete<TEntity>(id).ConfigureAwait(false);
+        public async Task<ActionResult<bool>> Delete(int id)
+        {
+            var result = await base.Delete<TEntity>(id).ConfigureAwait(false);
+            return ToActionResult(result);
+        }
 
         #endregion
     }
@@ -45,23 +63,41 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         #region HttpMethods
 
         [HttpPost("{id}")]
-        public async Task<ActionResult<TViewModel>> Post(int id, [FromBody] TViewModel viewModel) =>
-            await base.Post<TViewModel, TViewModel, TEntity>(id, viewModel).ConfigureAwait(false);
+        public async Task<ActionResult<TViewModel>> Post(int id, [FromBody] TViewModel viewModel)
+        {
+            var model = Mapper.Map<TEntity>(viewModel);
+            var result = await base.Post(id, model).ConfigureAwait(false);
+            return MapResponse<TEntity, TViewModel>(result);
+        }
 
         [HttpPut]
-        public async Task<ActionResult<TViewModel>> Put([FromBody] TViewModel viewModel) =>
-            await base.Put<TViewModel, TViewModel, TEntity>(viewModel).ConfigureAwait(false);
+        public async Task<ActionResult<TViewModel>> Put([FromBody] TViewModel viewModel)
+        {
+            var model = Mapper.Map<TEntity>(viewModel);
+            var result = await base.Put(model).ConfigureAwait(false);
+            return MapResponse<TEntity, TViewModel>(result);
+        }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TViewModel>>> Get() =>
-            await base.Get<TViewModel, TEntity>().ConfigureAwait(false);
+        public async Task<ActionResult<IEnumerable<TViewModel>>> Get()
+        {
+            var result = await base.Get<TEntity>().ConfigureAwait(false);
+            return MapResponse<TEntity, TViewModel>(result);
+        }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TViewModel>> Get(int id) =>
-            await base.Get<TViewModel, TEntity>(id).ConfigureAwait(false);
+        public async Task<ActionResult<TViewModel>> Get(int id)
+        {
+            var result = await base.Get<TEntity>(id).ConfigureAwait(false);
+            return MapResponse<TEntity, TViewModel>(result);
+        }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<bool>> Delete(int id) => await base.Delete<TEntity>(id).ConfigureAwait(false);
+        public async Task<ActionResult<bool>> Delete(int id)
+        {
+            var result = await base.Delete<TEntity>(id).ConfigureAwait(false);
+            return ToActionResult(result);
+        }
 
         #endregion
     }
