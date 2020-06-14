@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using Aptacode.CSharp.Common.Persistence;
@@ -82,8 +83,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             }
         }
 
-        protected virtual async Task<ServerResponse<IEnumerable<T>>> Get<T>(
-            Query<T> queryExpression, Validator validator = null)
+        protected virtual async Task<ServerResponse<IEnumerable<T>>> Get<T>(Expression<Func<T, bool>> queryExpression = null, Validator validator = null)
             where T : IEntity
         {
             if (validator != null)
@@ -97,31 +97,17 @@ namespace Aptacode.CSharp.Core.Http.Controllers
 
             try
             {
-                var results = await UnitOfWork.Repository<T>().AsQueryable().Where(queryExpression()).ToListAsync()
-                    .ConfigureAwait(false);
-                return new ServerResponse<IEnumerable<T>>(HttpStatusCode.OK, "Success", results);
-            }
-            catch
-            {
-                return new ServerResponse<IEnumerable<T>>(HttpStatusCode.BadRequest, "DataBase Error");
-            }
-        }
+                IEnumerable<T> results;
 
-        protected virtual async Task<ServerResponse<IEnumerable<T>>> Get<T>(
-            Validator validator = null) where T : IEntity
-        {
-            if (validator != null)
-            {
-                var result = await validator().ConfigureAwait(false);
-                if (!result.HasValue || !result.Value)
+                if (queryExpression == null)
                 {
-                    return new ServerResponse<IEnumerable<T>>(result.StatusCode, result.Message);
+                    results = await UnitOfWork.Repository<T>().AsQueryable().ToListAsync().ConfigureAwait(false);
                 }
-            }
+                else
+                {
+                    results = await UnitOfWork.Repository<T>().AsQueryable().Where(queryExpression).ToListAsync().ConfigureAwait(false);
+                }
 
-            try
-            {
-                var results = await UnitOfWork.Repository<T>().AsQueryable().ToListAsync().ConfigureAwait(false);
                 return new ServerResponse<IEnumerable<T>>(HttpStatusCode.OK, "Success", results);
             }
             catch
@@ -129,7 +115,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
                 return new ServerResponse<IEnumerable<T>>(HttpStatusCode.BadRequest, "DataBase Error");
             }
         }
-
+        
         protected virtual async Task<ServerResponse<T>> Get<T>(int id,
             Validator<int> validator = null) where T : IEntity
         {
@@ -145,12 +131,9 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             try
             {
                 var result = await UnitOfWork.Repository<T>().Get(id).ConfigureAwait(false);
-                if (result == null)
-                {
-                    return new ServerResponse<T>(HttpStatusCode.BadRequest, "Not Found");
-                }
-
-                return new ServerResponse<T>(HttpStatusCode.OK, "Success", result);
+                return result != null ? 
+                    new ServerResponse<T>(HttpStatusCode.OK, "Success", result) : 
+                    new ServerResponse<T>(HttpStatusCode.BadRequest, "Not Found");
             }
             catch
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Aptacode.CSharp.Common.Persistence;
 using Aptacode.CSharp.Common.Persistence.UnitOfWork;
@@ -57,16 +58,9 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
             var response = await base.Get<TEntity>(id, validator).ConfigureAwait(false);
             return MapResponse<TEntity, TViewModel>(response);
         }
-
+        
         protected virtual async Task<ActionResult<IEnumerable<TViewModel>>> Get<TViewModel, TEntity>(
-            Validator validator = null) where TEntity : IEntity
-        {
-            var response = await base.Get<TEntity>(validator).ConfigureAwait(false);
-            return MapResponse<TEntity, TViewModel>(response);
-        }
-
-        protected virtual async Task<ActionResult<IEnumerable<TViewModel>>> Get<TViewModel, TEntity>(
-            Query<TEntity> queryExpression, Validator validator = null)
+            Expression<Func<TEntity, bool>> queryExpression = null, Validator validator = null)
             where TEntity : IEntity
         {
             var response = await base.Get(queryExpression, validator).ConfigureAwait(false);
