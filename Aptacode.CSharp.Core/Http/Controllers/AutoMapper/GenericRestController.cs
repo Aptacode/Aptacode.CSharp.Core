@@ -31,14 +31,14 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
             await base.Get<TGetViewModel, TEntity>(id).ConfigureAwait(false);
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id) => await base.Delete<TEntity>(id).ConfigureAwait(false);
+        public async Task<ActionResult<bool>> Delete(int id) => await base.Delete<TEntity>(id).ConfigureAwait(false);
 
         #endregion
     }
 
 
     public class GenericRestController<TViewModel, TEntity> : AutoMapperGenericController
-    where TEntity : IEntity
+        where TEntity : IEntity
     {
         public GenericRestController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
 
@@ -61,7 +61,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
             await base.Get<TViewModel, TEntity>(id).ConfigureAwait(false);
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id) => await base.Delete<TEntity>(id).ConfigureAwait(false);
+        public async Task<ActionResult<bool>> Delete(int id) => await base.Delete<TEntity>(id).ConfigureAwait(false);
 
         #endregion
     }

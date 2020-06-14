@@ -1,4 +1,3 @@
-using Aptacode.CSharp.Core.Http.Controllers;
 using Xunit;
 
 namespace Aptacode.CSharp.Core.Tests.Services

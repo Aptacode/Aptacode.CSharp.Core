@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Aptacode.CSharp.Common.Persistence;
 using Aptacode.CSharp.Common.Persistence.UnitOfWork;
@@ -24,56 +23,78 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         #endregion
 
         //Maps an ActionResult<TEntity> to An ActionResult<TViewModel>
-        private ActionResult<TViewModel> MapResponse<TEntity, TViewModel>(ActionResult<TEntity> response) =>
-            response.Value != null ? Ok(Mapper.Map<TViewModel>(response.Value)) : response.Result;
+        private ActionResult<TViewModel> MapResponse<TEntity, TViewModel>(ServerResponse<TEntity> response)
+        {
+            if (!response.HasValue)
+            {
+                return BadRequest(response.Message);
+            }
+
+            var mappedValue = Mapper.Map<TViewModel>(response.Value);
+            return ToActionResult(
+                ServerResponse<TViewModel>.Create(response.StatusCode, response.Message, mappedValue));
+        }
 
         //Maps an ActionResult<IEnumerable<TEntity>> to An ActionResult<IEnumerable<TViewModel>>
         private ActionResult<IEnumerable<TViewModel>> MapResponse<TEntity, TViewModel>(
-            ActionResult<IEnumerable<TEntity>> response)
+            ServerResponse<IEnumerable<TEntity>> response)
         {
-            return response.Value != null ? Ok(response.Value.Select(r => Mapper.Map<TViewModel>(r))) : response.Result;
+            if (!response.HasValue)
+            {
+                return BadRequest(response.Message);
+            }
+
+            var mappedValue = response.Value.Select(r => Mapper.Map<TViewModel>(r));
+            return ToActionResult(
+                ServerResponse<IEnumerable<TViewModel>>.Create(response.StatusCode, response.Message, mappedValue));
         }
 
         #region HttpMethods
 
         protected virtual async Task<ActionResult<TViewModel>> Get<TViewModel, TEntity>(int id,
-            Func<int, Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
+            Validator<int> validator = null) where TEntity : IEntity
         {
             var response = await base.Get<TEntity>(id, validator).ConfigureAwait(false);
-            return response.Value != null ? Ok(MapResponse<TEntity, TViewModel>(response)) : response.Result;
+            return MapResponse<TEntity, TViewModel>(response);
         }
 
         protected virtual async Task<ActionResult<IEnumerable<TViewModel>>> Get<TViewModel, TEntity>(
-            Func<Task<(bool, StatusCodeResult)>> validator = null) where TEntity : IEntity
+            Validator validator = null) where TEntity : IEntity
         {
             var response = await base.Get<TEntity>(validator).ConfigureAwait(false);
-            return response.Value != null ? Ok(MapResponse<TEntity, TViewModel>(response)) : response.Result;
+            return MapResponse<TEntity, TViewModel>(response);
         }
 
         protected virtual async Task<ActionResult<IEnumerable<TViewModel>>> Get<TViewModel, TEntity>(
-            Expression<Func<TEntity, bool>> queryExpression, Func<Task<(bool, StatusCodeResult)>> validator = null)
+            Query<TEntity> queryExpression, Validator validator = null)
             where TEntity : IEntity
         {
             var response = await base.Get(queryExpression, validator).ConfigureAwait(false);
-            return response.Value != null ? Ok(MapResponse<TEntity, TViewModel>(response)) : response.Result;
+            return MapResponse<TEntity, TViewModel>(response);
         }
 
         protected virtual async Task<ActionResult<TGetViewModel>> Post<TGetViewModel, TPostViewModel, TEntity>(int id,
-            TPostViewModel viewModel, Func<TEntity, Task<(bool, StatusCodeResult)>> validator = null)
+            TPostViewModel viewModel, Validator<TEntity> validator = null)
             where TEntity : IEntity
         {
             var entity = Mapper.Map<TEntity>(viewModel);
             var response = await base.Post(id, entity, validator).ConfigureAwait(false);
-            return response.Value != null ? Ok(MapResponse<TEntity, TGetViewModel>(response)) : response.Result;
+            return MapResponse<TEntity, TGetViewModel>(response);
         }
 
         protected virtual async Task<ActionResult<TGetViewModel>> Put<TGetViewModel, TPostViewModel, TEntity>(
-            TPostViewModel viewModel, Func<TEntity, Task<(bool, StatusCodeResult)>> validator = null)
+            TPostViewModel viewModel, Validator<TEntity> validator = null)
             where TEntity : IEntity
         {
             var entity = Mapper.Map<TEntity>(viewModel);
             var response = await base.Put(entity, validator).ConfigureAwait(false);
-            return response.Value != null ? Ok(MapResponse<TEntity, TGetViewModel>(response)) : response.Result;
+            return MapResponse<TEntity, TGetViewModel>(response);
+        }
+
+        protected virtual async Task<ActionResult<bool>> Delete<TEntity>(int id) where TEntity : IEntity
+        {
+            var response = await base.Delete<TEntity>(id).ConfigureAwait(false);
+            return ToActionResult(response);
         }
 
         #endregion
