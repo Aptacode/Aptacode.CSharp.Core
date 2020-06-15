@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
 {
     /// <summary>
-    /// Provides a collection of generic Http methods for querying &
-    /// returning entities from an IRepository contained within the given IGenericUnitOfWork
+    ///     Provides a collection of generic Http methods for querying &
+    ///     returning entities from an IRepository contained within the given IGenericUnitOfWork
     /// </summary>
     /// <typeparam name="TGetViewModel"></typeparam>
     /// <typeparam name="TPutViewModel"></typeparam>
@@ -39,7 +39,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TGetViewModel>>> Get()
-        { 
+        {
             var result = await base.Get<TEntity>().ConfigureAwait(false);
             return ToActionResult<TEntity, TGetViewModel>(result);
         }
@@ -62,13 +62,13 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
     }
 
     /// <summary>
-    /// Provides a collection of generic Http methods for querying &
-    /// returning entities from an IRepository contained within the given IGenericUnitOfWork
+    ///     Provides a collection of generic Http methods for querying &
+    ///     returning entities from an IRepository contained within the given IGenericUnitOfWork
     /// </summary>
     /// <typeparam name="TGetViewModel"></typeparam>
     /// <typeparam name="TPutViewModel"></typeparam>
-    /// <typeparam name="TEntity"></typeparam>   
-      public class GenericRestController<TViewModel, TEntity> : AutoMapperGenericController
+    /// <typeparam name="TEntity"></typeparam>
+    public class GenericRestController<TViewModel, TEntity> : AutoMapperGenericController
         where TEntity : IEntity
     {
         public GenericRestController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }

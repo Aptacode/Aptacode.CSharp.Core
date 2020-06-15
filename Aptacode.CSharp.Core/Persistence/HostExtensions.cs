@@ -18,7 +18,6 @@ namespace Aptacode.CSharp.Core.Persistence
                 {
                     var db = services.GetRequiredService<TDbContext>();
                     db.Database.Migrate();
-
                 }
                 catch (Exception ex)
                 {

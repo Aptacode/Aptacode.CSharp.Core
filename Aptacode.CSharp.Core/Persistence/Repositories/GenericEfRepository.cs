@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Aptacode.CSharp.Core.Persistence.Repositories
 {
     /// <summary>
-    /// A Generic Wrapper of EfCore's DBSet
+    ///     A Generic Wrapper of EfCore's DBSet
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     public class GenericEfRepository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity

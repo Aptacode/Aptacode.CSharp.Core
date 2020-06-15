@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Aptacode.CSharp.Core.Http.Controllers
 {
     /// <summary>
-    /// Provides a collection of generic Http methods for querying &
-    /// returning entities from an IRepository contained within the given IGenericUnitOfWork
+    ///     Provides a collection of generic Http methods for querying &
+    ///     returning entities from an IRepository contained within the given IGenericUnitOfWork
     /// </summary>
     public abstract class GenericController : ControllerBase
     {
@@ -25,7 +25,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         }
 
         /// <summary>
-        /// Finds and updates the given entity in the matching IRepository<T> from the IGenericUnitOfWork
+        ///     Finds and updates the given entity in the matching IRepository<T> from the IGenericUnitOfWork
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="id"></param>
@@ -67,7 +67,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         }
 
         /// <summary>
-        /// Inserts a new entity in the matching IRepository<T> from the IGenericUnitOfWork
+        ///     Inserts a new entity in the matching IRepository<T> from the IGenericUnitOfWork
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="entity"></param>
@@ -103,13 +103,15 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         }
 
         /// <summary>
-        /// Returns a collection of entities found to match the queryExpression in the matching IRepository<T> from the IGenericUnitOfWork
+        ///     Returns a collection of entities found to match the queryExpression in the matching IRepository
+        ///     <T> from the IGenericUnitOfWork
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="queryExpression"></param>
         /// <param name="validator"></param>
         /// <returns></returns>
-        protected virtual async Task<ServerResponse<IEnumerable<T>>> Get<T>(Expression<Func<T, bool>> queryExpression = null, Validator validator = null)
+        protected virtual async Task<ServerResponse<IEnumerable<T>>> Get<T>(
+            Expression<Func<T, bool>> queryExpression = null, Validator validator = null)
             where T : IEntity
         {
             if (validator != null)
@@ -131,7 +133,8 @@ namespace Aptacode.CSharp.Core.Http.Controllers
                 }
                 else
                 {
-                    results = await UnitOfWork.Repository<T>().AsQueryable().Where(queryExpression).ToListAsync().ConfigureAwait(false);
+                    results = await UnitOfWork.Repository<T>().AsQueryable().Where(queryExpression).ToListAsync()
+                        .ConfigureAwait(false);
                 }
 
                 return new ServerResponse<IEnumerable<T>>(HttpStatusCode.OK, "Success", results);
@@ -143,7 +146,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         }
 
         /// <summary>
-        /// Returns the requested entity from the matching IRepository<T> within the IGenericUnitOfWork
+        ///     Returns the requested entity from the matching IRepository<T> within the IGenericUnitOfWork
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="id"></param>
@@ -164,9 +167,9 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             try
             {
                 var result = await UnitOfWork.Repository<T>().Get(id).ConfigureAwait(false);
-                return result != null ?
-                    new ServerResponse<T>(HttpStatusCode.OK, "Success", result) : 
-                    new ServerResponse<T>(HttpStatusCode.BadRequest, "Not Found");
+                return result != null
+                    ? new ServerResponse<T>(HttpStatusCode.OK, "Success", result)
+                    : new ServerResponse<T>(HttpStatusCode.BadRequest, "Not Found");
             }
             catch
             {
@@ -175,7 +178,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         }
 
         /// <summary>
-        /// Deletes the requested entity from the matching IRepository<T> within the IGenericUnitOfWork
+        ///     Deletes the requested entity from the matching IRepository<T> within the IGenericUnitOfWork
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="id"></param>
@@ -207,7 +210,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         }
 
         /// <summary>
-        /// Converts the given ServerResponse<T> into an ActionResult<T>
+        ///     Converts the given ServerResponse<T> into an ActionResult<T>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="response"></param>

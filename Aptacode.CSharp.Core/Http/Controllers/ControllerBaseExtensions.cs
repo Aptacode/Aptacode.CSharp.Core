@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Aptacode.CSharp.Core.Http.Controllers
 {
     /// <summary>
-    /// A collection of extension methods for a ControllerBase
+    ///     A collection of extension methods for a ControllerBase
     /// </summary>
     public static class ControllerBaseExtensions
     {
