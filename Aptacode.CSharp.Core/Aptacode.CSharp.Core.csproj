@@ -29,8 +29,8 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Aptacode.CSharp.Common.Http" Version="1.0.0.19" />
-    <PackageReference Include="Aptacode.CSharp.Common.Persistence" Version="1.0.0.15" />
+    <PackageReference Include="Aptacode.CSharp.Common.Http" Version="1.0.0.20" />
+    <PackageReference Include="Aptacode.CSharp.Common.Persistence" Version="1.0.0.20" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />

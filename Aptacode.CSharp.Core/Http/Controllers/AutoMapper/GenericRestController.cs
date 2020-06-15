@@ -7,6 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
 {
+    /// <summary>
+    /// Provides a collection of generic Http methods for querying &
+    /// returning entities from an IRepository contained within the given IGenericUnitOfWork
+    /// </summary>
+    /// <typeparam name="TGetViewModel"></typeparam>
+    /// <typeparam name="TPutViewModel"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
     public class GenericRestController<TGetViewModel, TPutViewModel, TEntity> : AutoMapperGenericController
         where TEntity : IEntity
     {
@@ -19,7 +26,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         {
             var model = Mapper.Map<TEntity>(viewModel);
             var result = await base.Post(id, model).ConfigureAwait(false);
-            return MapResponse<TEntity, TGetViewModel>(result);
+            return ToActionResult<TEntity, TGetViewModel>(result);
         }
 
         [HttpPut]
@@ -27,21 +34,21 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         {
             var model = Mapper.Map<TEntity>(viewModel);
             var result = await base.Put(model).ConfigureAwait(false);
-            return MapResponse<TEntity, TGetViewModel>(result);
+            return ToActionResult<TEntity, TGetViewModel>(result);
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TGetViewModel>>> Get()
         { 
             var result = await base.Get<TEntity>().ConfigureAwait(false);
-            return MapResponse<TEntity, TGetViewModel>(result);
+            return ToActionResult<TEntity, TGetViewModel>(result);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TGetViewModel>> Get(int id)
         {
             var result = await base.Get<TEntity>(id).ConfigureAwait(false);
-            return MapResponse<TEntity, TGetViewModel>(result);
+            return ToActionResult<TEntity, TGetViewModel>(result);
         }
 
         [HttpDelete("{id}")]
@@ -54,8 +61,14 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         #endregion
     }
 
-
-    public class GenericRestController<TViewModel, TEntity> : AutoMapperGenericController
+    /// <summary>
+    /// Provides a collection of generic Http methods for querying &
+    /// returning entities from an IRepository contained within the given IGenericUnitOfWork
+    /// </summary>
+    /// <typeparam name="TGetViewModel"></typeparam>
+    /// <typeparam name="TPutViewModel"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>   
+      public class GenericRestController<TViewModel, TEntity> : AutoMapperGenericController
         where TEntity : IEntity
     {
         public GenericRestController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
@@ -67,7 +80,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         {
             var model = Mapper.Map<TEntity>(viewModel);
             var result = await base.Post(id, model).ConfigureAwait(false);
-            return MapResponse<TEntity, TViewModel>(result);
+            return ToActionResult<TEntity, TViewModel>(result);
         }
 
         [HttpPut]
@@ -75,21 +88,21 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         {
             var model = Mapper.Map<TEntity>(viewModel);
             var result = await base.Put(model).ConfigureAwait(false);
-            return MapResponse<TEntity, TViewModel>(result);
+            return ToActionResult<TEntity, TViewModel>(result);
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TViewModel>>> Get()
         {
             var result = await base.Get<TEntity>().ConfigureAwait(false);
-            return MapResponse<TEntity, TViewModel>(result);
+            return ToActionResult<TEntity, TViewModel>(result);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TViewModel>> Get(int id)
         {
             var result = await base.Get<TEntity>(id).ConfigureAwait(false);
-            return MapResponse<TEntity, TViewModel>(result);
+            return ToActionResult<TEntity, TViewModel>(result);
         }
 
         [HttpDelete("{id}")]

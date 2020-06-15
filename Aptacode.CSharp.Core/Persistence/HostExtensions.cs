@@ -8,15 +8,17 @@ namespace Aptacode.CSharp.Core.Persistence
 {
     public static class HostExtensions
     {
-        public static IHost MigrateRelationalDb<TDbContext>(this IHost webHost) where TDbContext : DbContext
+        public static IHost MigrateRelationalDb<TDbContext>(this IHost host) where TDbContext : DbContext
         {
-            using (var scope = webHost.Services.CreateScope())
+            using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+
                 try
                 {
                     var db = services.GetRequiredService<TDbContext>();
                     db.Database.Migrate();
+
                 }
                 catch (Exception ex)
                 {
@@ -25,7 +27,7 @@ namespace Aptacode.CSharp.Core.Persistence
                 }
             }
 
-            return webHost;
+            return host;
         }
     }
 }

@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
 {
+    /// <summary>
+    /// Provides a collection of generic Http methods for querying &
+    /// returning entities from an IRepository contained within the given IGenericUnitOfWork
+    /// </summary>
     public abstract class AutoMapperGenericController : GenericController
     {
         protected AutoMapperGenericController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork)
@@ -15,12 +19,17 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         }
 
         #region Properties
-
         protected IMapper Mapper { get; }
 
         #endregion
-        
-        public ActionResult<TViewModel> MapResponse<TEntity, TViewModel>(ServerResponse<TEntity> response)
+        /// <summary>
+        /// Converts the given ServerResponse<TEntity> into an ActionResult<TViewModel>
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TViewModel"></typeparam>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        protected ActionResult<TViewModel> ToActionResult<TEntity, TViewModel>(ServerResponse<TEntity> response)
         {
             if (!response.HasValue)
             {
@@ -32,7 +41,14 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
                 ServerResponse<TViewModel>.Create(response.StatusCode, response.Message, mappedValue));
         }
 
-        public ActionResult<IEnumerable<TViewModel>> MapResponse<TEntity, TViewModel>(ServerResponse<IEnumerable<TEntity>> response)
+        /// <summary>
+        /// Converts the given ServerResponse<IEnumerable<TEntity>> into an ActionResult<IEnumerable<TViewModel>>
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <typeparam name="TViewModel"></typeparam>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        protected ActionResult<IEnumerable<TViewModel>> ToActionResult<TEntity, TViewModel>(ServerResponse<IEnumerable<TEntity>> response)
         {
             if (!response.HasValue)
             {
