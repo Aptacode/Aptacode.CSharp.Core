@@ -7,9 +7,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>MIT</Copyright>
-    <Version>1.0.2.20</Version>
-    <AssemblyVersion>1.0.2.20</AssemblyVersion>
-    <FileVersion>1.0.2.20</FileVersion>
+    <Version>1.0.2.23</Version>
+    <AssemblyVersion>1.0.2.23</AssemblyVersion>
+    <FileVersion>1.0.2.23</FileVersion>
     <PackageId>Aptacode.CSharp.Core</PackageId>
     <Authors>Aptacode</Authors>
     <Company>Aptacode</Company>
@@ -29,8 +29,8 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Aptacode.CSharp.Common.Http" Version="1.0.0.20" />
-    <PackageReference Include="Aptacode.CSharp.Common.Persistence" Version="1.0.0.20" />
+    <PackageReference Include="Aptacode.CSharp.Common.Http" Version="1.0.0.23" />
+    <PackageReference Include="Aptacode.CSharp.Common.Persistence" Version="1.0.0.23" />
     <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />

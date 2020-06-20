@@ -11,7 +11,8 @@ namespace Aptacode.CSharp.Core.Persistence.Repositories
     ///     A Generic Wrapper of EfCore's DBSet
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public class GenericEfRepository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
+    /// <typeparam name="TKey"></typeparam>
+    public class GenericEfRepository<TKey, TEntity> : IRepository<TKey, TEntity> where TEntity : class, IEntity<TKey>
     {
         public GenericEfRepository(DbSet<TEntity> dbSet)
         {
@@ -20,10 +21,10 @@ namespace Aptacode.CSharp.Core.Persistence.Repositories
 
         protected DbSet<TEntity> DbSet { get; }
 
-        public virtual Task<int> Create(TEntity entity)
+        public virtual Task Create(TEntity entity)
         {
             DbSet.Add(entity);
-            return Task.FromResult(0);
+            return Task.CompletedTask;
         }
 
         public virtual Task Update(TEntity entity)
@@ -34,9 +35,9 @@ namespace Aptacode.CSharp.Core.Persistence.Repositories
 
         public virtual async Task<IEnumerable<TEntity>> GetAll() => await DbSet.ToListAsync().ConfigureAwait(false);
 
-        public virtual async Task<TEntity> Get(int id) => await DbSet.FindAsync(id).ConfigureAwait(false);
+        public virtual async Task<TEntity> Get(TKey id) => await DbSet.FindAsync(id).ConfigureAwait(false);
 
-        public virtual async Task Delete(int id)
+        public virtual async Task Delete(TKey id)
         {
             var entity = await Get(id).ConfigureAwait(false);
             if (entity != null)

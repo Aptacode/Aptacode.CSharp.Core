@@ -28,19 +28,20 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         ///     Finds and updates the given entity in the matching IRepository<T> from the IGenericUnitOfWork
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
         /// <param name="id"></param>
         /// <param name="entity"></param>
         /// <param name="validator"></param>
         /// <returns></returns>
-        protected virtual async Task<ServerResponse<T>> Post<T>(int id, T entity, Validator<T> validator = null)
-            where T : IEntity
+        protected virtual async Task<ServerResponse<T>> Post<TKey, T>(TKey id, T entity, Validator<T> validator = null)
+            where T : IEntity<TKey>
         {
             if (entity == null)
             {
                 return new ServerResponse<T>(HttpStatusCode.BadRequest, "Null Entity was given");
             }
 
-            if (id != entity.Id)
+            if (!id.Equals(entity.Id))
             {
                 return new ServerResponse<T>(HttpStatusCode.BadRequest, "Entity's Id did not match");
             }
@@ -56,7 +57,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
 
             try
             {
-                await UnitOfWork.Repository<T>().Update(entity).ConfigureAwait(false);
+                await UnitOfWork.Repository<TKey, T>().Update(entity).ConfigureAwait(false);
                 await UnitOfWork.Commit().ConfigureAwait(false);
                 return new ServerResponse<T>(HttpStatusCode.OK, "Success", entity);
             }
@@ -70,11 +71,12 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         ///     Inserts a new entity in the matching IRepository<T> from the IGenericUnitOfWork
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TKey"></typeparam>
         /// <param name="entity"></param>
         /// <param name="validator"></param>
         /// <returns></returns>
-        protected virtual async Task<ServerResponse<T>> Put<T>(T entity, Validator<T> validator = null)
-            where T : IEntity
+        protected virtual async Task<ServerResponse<T>> Put<TKey, T>(T entity, Validator<T> validator = null)
+            where T : IEntity<TKey>
         {
             if (entity == null)
             {
@@ -92,7 +94,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
 
             try
             {
-                await UnitOfWork.Repository<T>().Create(entity).ConfigureAwait(false);
+                await UnitOfWork.Repository<TKey, T>().Create(entity).ConfigureAwait(false);
                 await UnitOfWork.Commit().ConfigureAwait(false);
                 return new ServerResponse<T>(HttpStatusCode.OK, "Success", entity);
             }
@@ -110,9 +112,9 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         /// <param name="queryExpression"></param>
         /// <param name="validator"></param>
         /// <returns></returns>
-        protected virtual async Task<ServerResponse<IEnumerable<T>>> Get<T>(
+        protected virtual async Task<ServerResponse<IEnumerable<T>>> Get<TKey, T>(
             Expression<Func<T, bool>> queryExpression = null, Validator validator = null)
-            where T : IEntity
+            where T : IEntity<TKey>
         {
             if (validator != null)
             {
@@ -129,11 +131,11 @@ namespace Aptacode.CSharp.Core.Http.Controllers
 
                 if (queryExpression == null)
                 {
-                    results = await UnitOfWork.Repository<T>().AsQueryable().ToListAsync().ConfigureAwait(false);
+                    results = await UnitOfWork.Repository<TKey, T>().AsQueryable().ToListAsync().ConfigureAwait(false);
                 }
                 else
                 {
-                    results = await UnitOfWork.Repository<T>().AsQueryable().Where(queryExpression).ToListAsync()
+                    results = await UnitOfWork.Repository<TKey, T>().AsQueryable().Where(queryExpression).ToListAsync()
                         .ConfigureAwait(false);
                 }
 
@@ -152,8 +154,8 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         /// <param name="id"></param>
         /// <param name="validator"></param>
         /// <returns></returns>
-        protected virtual async Task<ServerResponse<T>> Get<T>(int id,
-            Validator<int> validator = null) where T : IEntity
+        protected virtual async Task<ServerResponse<T>> Get<TKey, T>(TKey id,
+            Validator<TKey> validator = null) where T : IEntity<TKey>
         {
             if (validator != null)
             {
@@ -166,7 +168,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
 
             try
             {
-                var result = await UnitOfWork.Repository<T>().Get(id).ConfigureAwait(false);
+                var result = await UnitOfWork.Repository<TKey, T>().Get(id).ConfigureAwait(false);
                 return result != null
                     ? new ServerResponse<T>(HttpStatusCode.OK, "Success", result)
                     : new ServerResponse<T>(HttpStatusCode.BadRequest, "Not Found");
@@ -184,8 +186,8 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         /// <param name="id"></param>
         /// <param name="validator"></param>
         /// <returns></returns>
-        protected virtual async Task<ServerResponse<bool>> Delete<TEntity>(int id,
-            Validator<int> validator = null) where TEntity : IEntity
+        protected virtual async Task<ServerResponse<bool>> Delete<TKey, TEntity>(TKey id,
+            Validator<TKey> validator = null) where TEntity : IEntity<TKey>
         {
             if (validator != null)
             {
@@ -198,7 +200,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
 
             try
             {
-                await UnitOfWork.Repository<TEntity>().Delete(id).ConfigureAwait(false);
+                await UnitOfWork.Repository<TKey, TEntity>().Delete(id).ConfigureAwait(false);
                 await UnitOfWork.Commit().ConfigureAwait(false);
 
                 return new ServerResponse<bool>(HttpStatusCode.OK, "Success", true);
