@@ -29,7 +29,7 @@ namespace Aptacode.CSharp.Core.Persistence.Repositories
 
         public virtual Task Update(TEntity entity)
         {
-            DbSet.Attach(entity);
+            DbSet.Update(entity);
             return Task.CompletedTask;
         }
 

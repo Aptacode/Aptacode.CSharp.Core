@@ -7,9 +7,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>MIT</Copyright>
-    <Version>1.0.2.23</Version>
-    <AssemblyVersion>1.0.2.23</AssemblyVersion>
-    <FileVersion>1.0.2.23</FileVersion>
+    <Version>1.0.2.24</Version>
+    <AssemblyVersion>1.0.2.24</AssemblyVersion>
+    <FileVersion>1.0.2.24</FileVersion>
     <PackageId>Aptacode.CSharp.Core</PackageId>
     <Authors>Aptacode</Authors>
     <Company>Aptacode</Company>
