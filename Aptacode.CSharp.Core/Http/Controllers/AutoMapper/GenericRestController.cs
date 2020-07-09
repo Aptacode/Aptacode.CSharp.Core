@@ -17,7 +17,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
     public class GenericRestController<TKey, TGetViewModel, TPutViewModel, TEntity> : AutoMapperGenericController
         where TEntity : IEntity<TKey>
     {
-        public GenericRestController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
+        public GenericRestController(GenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
 
         #region HttpMethods
 
@@ -33,7 +33,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         public async Task<ActionResult<TGetViewModel>> Put([FromBody] TPutViewModel viewModel)
         {
             var model = Mapper.Map<TEntity>(viewModel);
-            var result = await base.Put< TKey, TEntity>(model).ConfigureAwait(false);
+            var result = await base.Put<TKey, TEntity>(model).ConfigureAwait(false);
             return ToActionResult<TEntity, TGetViewModel>(result);
         }
 
@@ -71,7 +71,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
     public class GenericRestController<TKey, TViewModel, TEntity> : AutoMapperGenericController
         where TEntity : IEntity<TKey>
     {
-        public GenericRestController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
+        public GenericRestController(GenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper) { }
 
         #region HttpMethods
 
@@ -87,7 +87,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
         public async Task<ActionResult<TViewModel>> Put([FromBody] TViewModel viewModel)
         {
             var model = Mapper.Map<TEntity>(viewModel);
-            var result = await base.Put< TKey, TEntity>(model).ConfigureAwait(false);
+            var result = await base.Put<TKey, TEntity>(model).ConfigureAwait(false);
             return ToActionResult<TEntity, TViewModel>(result);
         }
 

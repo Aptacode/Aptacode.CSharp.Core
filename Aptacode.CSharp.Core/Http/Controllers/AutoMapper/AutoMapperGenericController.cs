@@ -13,7 +13,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers.AutoMapper
     /// </summary>
     public abstract class AutoMapperGenericController : GenericController
     {
-        protected AutoMapperGenericController(IGenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork)
+        protected AutoMapperGenericController(GenericUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork)
         {
             Mapper = mapper ?? throw new NullReferenceException("IMapper was null");
         }

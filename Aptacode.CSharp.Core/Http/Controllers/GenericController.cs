@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using Aptacode.CSharp.Common.Persistence;
+using Aptacode.CSharp.Common.Persistence.Repository;
+using Aptacode.CSharp.Common.Persistence.Specification;
 using Aptacode.CSharp.Common.Persistence.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Aptacode.CSharp.Core.Http.Controllers
 {
@@ -17,9 +16,9 @@ namespace Aptacode.CSharp.Core.Http.Controllers
     /// </summary>
     public abstract class GenericController : ControllerBase
     {
-        protected readonly IGenericUnitOfWork UnitOfWork;
+        protected readonly GenericUnitOfWork UnitOfWork;
 
-        protected GenericController(IGenericUnitOfWork unitOfWork)
+        protected GenericController(GenericUnitOfWork unitOfWork)
         {
             UnitOfWork = unitOfWork ?? throw new NullReferenceException("IGenericUnitOfWork was null");
         }
@@ -57,7 +56,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
 
             try
             {
-                await UnitOfWork.Repository<TKey, T>().Update(entity).ConfigureAwait(false);
+                await UnitOfWork.Get<IGenericAsyncRepository<TKey, T>>().UpdateAsync(entity).ConfigureAwait(false);
                 await UnitOfWork.Commit().ConfigureAwait(false);
                 return new ServerResponse<T>(HttpStatusCode.OK, "Success", entity);
             }
@@ -94,7 +93,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
 
             try
             {
-                await UnitOfWork.Repository<TKey, T>().Create(entity).ConfigureAwait(false);
+                await UnitOfWork.Get<IGenericAsyncRepository<TKey, T>>().CreateAsync(entity).ConfigureAwait(false);
                 await UnitOfWork.Commit().ConfigureAwait(false);
                 return new ServerResponse<T>(HttpStatusCode.OK, "Success", entity);
             }
@@ -109,11 +108,11 @@ namespace Aptacode.CSharp.Core.Http.Controllers
         ///     <T> from the IGenericUnitOfWork
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="queryExpression"></param>
+        /// <param name="specification"></param>
         /// <param name="validator"></param>
         /// <returns></returns>
         protected virtual async Task<ServerResponse<IEnumerable<T>>> Get<TKey, T>(
-            Expression<Func<T, bool>> queryExpression = null, Validator validator = null)
+            Specification<T> specification = null, Validator validator = null)
             where T : IEntity<TKey>
         {
             if (validator != null)
@@ -129,13 +128,14 @@ namespace Aptacode.CSharp.Core.Http.Controllers
             {
                 IEnumerable<T> results;
 
-                if (queryExpression == null)
+                if (specification == null)
                 {
-                    results = await UnitOfWork.Repository<TKey, T>().AsQueryable().ToListAsync().ConfigureAwait(false);
+                    results = await UnitOfWork.Get<IGenericAsyncRepository<TKey, T>>().GetAllAsync()
+                        .ConfigureAwait(false);
                 }
                 else
                 {
-                    results = await UnitOfWork.Repository<TKey, T>().AsQueryable().Where(queryExpression).ToListAsync()
+                    results = await UnitOfWork.Get<ISpecificationAsyncRepository<TKey, T>>().GetAsync(specification)
                         .ConfigureAwait(false);
                 }
 
@@ -168,7 +168,8 @@ namespace Aptacode.CSharp.Core.Http.Controllers
 
             try
             {
-                var result = await UnitOfWork.Repository<TKey, T>().Get(id).ConfigureAwait(false);
+                var result = await UnitOfWork.Get<IGenericAsyncRepository<TKey, T>>().GetAsync(id)
+                    .ConfigureAwait(false);
                 return result != null
                     ? new ServerResponse<T>(HttpStatusCode.OK, "Success", result)
                     : new ServerResponse<T>(HttpStatusCode.BadRequest, "Not Found");
@@ -200,7 +201,7 @@ namespace Aptacode.CSharp.Core.Http.Controllers
 
             try
             {
-                await UnitOfWork.Repository<TKey, TEntity>().Delete(id).ConfigureAwait(false);
+                await UnitOfWork.Get<IGenericAsyncRepository<TKey, TEntity>>().DeleteAsync(id).ConfigureAwait(false);
                 await UnitOfWork.Commit().ConfigureAwait(false);
 
                 return new ServerResponse<bool>(HttpStatusCode.OK, "Success", true);

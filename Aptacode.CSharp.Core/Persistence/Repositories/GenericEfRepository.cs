@@ -12,7 +12,8 @@ namespace Aptacode.CSharp.Core.Persistence.Repositories
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TKey"></typeparam>
-    public class GenericEfRepository<TKey, TEntity> : IRepository<TKey, TEntity> where TEntity : class, IEntity<TKey>
+    public class GenericEfRepository<TKey, TEntity> : IGenericAsyncRepository<TKey, TEntity>
+        where TEntity : class, IEntity<TKey>
     {
         public GenericEfRepository(DbSet<TEntity> dbSet)
         {
@@ -21,31 +22,41 @@ namespace Aptacode.CSharp.Core.Persistence.Repositories
 
         protected DbSet<TEntity> DbSet { get; }
 
-        public virtual Task Create(TEntity entity)
+        public virtual Task CreateAsync(TEntity entity)
         {
             DbSet.Add(entity);
             return Task.CompletedTask;
         }
 
-        public virtual Task Update(TEntity entity)
+        public virtual Task UpdateAsync(TEntity entity)
         {
             DbSet.Update(entity);
             return Task.CompletedTask;
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAll() => await DbSet.ToListAsync().ConfigureAwait(false);
+        public virtual async Task<IReadOnlyCollection<TEntity>> GetAllAsync() =>
+            await DbSet.ToListAsync().ConfigureAwait(false);
 
-        public virtual async Task<TEntity> Get(TKey id) => await DbSet.FindAsync(id).ConfigureAwait(false);
+        public virtual async Task<TEntity> GetAsync(TKey id) => await DbSet.FindAsync(id).ConfigureAwait(false);
 
-        public virtual async Task Delete(TKey id)
+        public virtual async Task DeleteAsync(TKey id)
         {
-            var entity = await Get(id).ConfigureAwait(false);
+            var entity = await GetAsync(id).ConfigureAwait(false);
             if (entity != null)
             {
                 DbSet.Remove(entity);
             }
         }
 
-        public virtual IQueryable<TEntity> AsQueryable() => DbSet.AsQueryable();
+        public void Create(TEntity entity) => DbSet.Add(entity);
+        public void Update(TEntity entity) => DbSet.Update(entity);
+        public IReadOnlyCollection<TEntity> GetAll() => DbSet.ToList();
+        public TEntity Get(TKey id) => DbSet.Find(id);
+
+        public void Delete(TKey id)
+        {
+            var entity = Get(id);
+            DbSet.Remove(entity);
+        }
     }
 }
