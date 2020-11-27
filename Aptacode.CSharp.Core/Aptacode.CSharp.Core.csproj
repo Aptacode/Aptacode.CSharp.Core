@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <PackageReference Include="Aptacode.CSharp.Common.Http" Version="1.0.0.30" />
-    <PackageReference Include="Aptacode.CSharp.Common.Persistence" Version="1.0.0.28" />
+    <PackageReference Include="Aptacode.CSharp.Common.Persistence" Version="1.0.0.30" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
